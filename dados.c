@@ -99,7 +99,9 @@ void destruirProfessor(Professor *professor)
 }
 
 
-/* --- Turma --- */
+/* 
+---- Turma ----
+ */
 
 Turma *atualizarTurma(Turma *turma, Turma *nova_turma)
 {

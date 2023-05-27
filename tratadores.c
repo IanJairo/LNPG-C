@@ -415,7 +415,8 @@ void imprimir_endereco(Endereco *endereco)
     printf("Estado: %s", endereco->estado);
 }
 
-/*  ===================================  ==   */
+/*  =================================== PROFESSOR ==   */
+
 Professor *construir_professor()
 {
     Professor professor;
@@ -540,4 +541,102 @@ void imprimir_turma(Turma *turma)
 void adicionar_aluno(Turma *turma, Aluno *aluno)
 {
     adicionarAluno(turma, aluno);
+}
+
+/*  =================================== ESTATISTICA ==   */
+
+void tratador_menu_estatistica(Turma **turmas, Professor **professores)
+{
+    int opcao = menu_estatistica();
+    switch(opcao){
+        case 1:
+            imprimir_nomes_professores(professores);
+            break;
+        case 2:
+            imprimir_professores_sem_turma(professores,turmas);
+            break;
+        case 3:
+            imprimir_media_turmas(turmas);
+            break;
+        case 4:
+            break;
+    }
+    
+}
+
+void imprimir_nomes_professores(Professor **professores)
+{
+    if(professores[0] == NULL){
+        printf("Nenhum professor cadastrado!\n");
+        return;
+    }
+    printf("=== Professores Cadastrados ===\n\n");
+
+    for (int i = 0; i < MAX_PROFESSOR; i++){
+        if(professores[i] == NULL){
+            printf("\n");
+            return;
+        }
+        printf("%s", professores[i]->nome);
+    }
+}
+
+void imprimir_professores_sem_turma(Professor **professores, Turma **turmas)
+{
+    if(professores[0] == NULL){
+        printf("Nenhum professor cadastrado!\n");
+        return;
+    }
+    printf("=== Professores que nao possuem turma ===\n\n");
+
+    int qtd_professores_sem_turma = 0;
+    Professor *professores_sem_turma[MAX_PROFESSOR];
+    for(int i=0; i<MAX_PROFESSOR; i++){
+        if(professores[i] == NULL){
+                break;
+        }
+        int turma_encontrada = 0;
+        for(int i=0; i<MAX_TURMA; i++){
+            if(turmas[i] == NULL){
+                break;
+            }
+            if(turmas[i]->professor == professores[i]){
+                turma_encontrada = 1;
+                break;
+            }
+        }
+        if(!turma_encontrada){
+            //comentar oq ta roland aqui
+            professores_sem_turma[qtd_professores_sem_turma] = professores[i];
+            ++qtd_professores_sem_turma;
+        }
+    }
+    if(professores_sem_turma[0 == NULL]){
+        printf("Todos os professores possuem uma turma!\n\n");
+        return;
+    }
+    for(int i=0; i<qtd_professores_sem_turma; i++){
+        if(professores_sem_turma[i] == NULL){
+            break;
+        }
+        printf("%s", professores_sem_turma[i]->matricula);
+    }
+}
+void imprimir_media_turmas(Turma **turmas)
+{
+    if(turmas[0] == NULL){
+        printf("Nenhuma turma cadastrada!\n\n");
+        return;
+    }
+    float soma = 0.0;
+    int qtd_turmas = 0;
+    for(int i=0; i<MAX_TURMA; i++){
+        if(turmas[i] == NULL){
+            break;
+        }
+        //explicar isso
+        ++qtd_turmas;
+        soma += turmas[i]->media_turma;
+    }
+    printf("Note media de todas as turmas cadastradas: %.2f\n\n", soma/qtd_turmas);
 }

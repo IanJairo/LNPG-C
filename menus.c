@@ -11,7 +11,8 @@ int menu_principal()
     printf("1 - Central do Aluno\n");
     printf("2 - Central do Professor\n");
     printf("3 - Central da Turma\n");
-    printf("4 - Sair\n");
+    printf("4 - Central de estatisticas\n");
+    printf("5 - Sair\n");
 
     do
     {
@@ -20,7 +21,7 @@ int menu_principal()
         scanf("%d", &opcao);
         getchar();
 
-        if (opcao > 0 && opcao < 5)
+        if (opcao > 0 && opcao < 6)
         {
             return opcao;
         }
@@ -51,7 +52,7 @@ int menu_crud_aluno()
         {
             return opcao;
         }
-        printf("Opcao inválida!! Tente novamente\n\n");
+        printf("Opcao invalida! Tente novamente\n\n");
 
     } while (1);
 }
@@ -78,7 +79,7 @@ int menu_crud_professor()
         {
             return opcao;
         }
-        printf("Opcao inválida!! Tente novamente\n\n");
+        printf("Opcao invalida! Tente novamente\n\n");
 
     } while (1);
 }
@@ -114,7 +115,32 @@ int menu_crud_turma()
         {
             return opcao;
         }
-        printf("Opcao inválida!! Tente novamente\n\n");
+        printf("Opcao invalida! Tente novamente\n\n");
+
+    } while (1);
+}
+
+int menu_estatistica()
+{
+    int opcao = 0;
+    printf("==========================================\n");
+    printf("======== Central de estatisticas =========\n");
+    printf("==========================================\n\n");
+    printf("1 - Exibir nome dos professores\n");
+    printf("2 - Exibir matriculas dos professores que nao possuem turmas\n");
+    printf("3 - Calculo da media de todas as turmas\n");
+    printf("4 - Voltar ao menu anterior\n");
+    
+    do
+    {
+        printf("Opcao: ");
+        scanf("%d", &opcao);
+        getchar();
+        if (opcao > 0 && opcao < 5)
+        {
+            return opcao;
+        }
+        printf("Opcao invalida! Tente novamente\n\n");
 
     } while (1);
 }

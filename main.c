@@ -14,6 +14,7 @@ int main(int argc, char const *argv[])
     int qtd_atual_aluno = 0;
     int qtd_atual_professor = 0;
     int qtd_atual_turma = 0;
+
     do
     {
         op_menu_principal = menu_principal();
@@ -29,8 +30,11 @@ int main(int argc, char const *argv[])
             tratador_menu_turma(turmas, alunos, professores, &qtd_atual_turma);
             break;
         case 4:
+            tratador_menu_estatistica(turmas, professores);
+            break;
+        case 5:
             printf("Finalizando app...\n\n");
         }
-    } while (op_menu_principal != 4);
+    } while (op_menu_principal != 5);
     return 0;
 }
