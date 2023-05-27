@@ -60,5 +60,21 @@ void destruirTurma(Turma *turma);
 
 Turma *adicionarProfessor(Turma *turma, Professor *professor);
 
+/* --- Professor --- */
+
+typedef struct
+{
+    char matricula[10];
+    char nome[50];
+    char cpf[12];
+    Endereco *endereco;
+} Professor;
+
+
+Professor *criarProfessor(char *matricula, char *cpf, char *nome, Endereco *end);
+
+Professor *atualizarProfessor(Professor *professor, Professor *novo_professor);
+
+void destruirProfessor(Professor *professor);
 
 #endif
