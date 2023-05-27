@@ -106,6 +106,18 @@ Aluno *construir_aluno()
     return criarAluno(aluno.matricula, aluno.cpf, aluno.nome, aluno.endereco);
 }
 
+Aluno *atualizar_aluno(Aluno *aluno)
+{
+    Aluno novo_aluno;
+    printf("CPF\t>");
+    fgets(novo_aluno.cpf, 12, stdin);
+    printf("Nome\t>");
+    fgets(novo_aluno.nome, 50, stdin);
+    novo_aluno.endereco = construir_endereco();
+    return atualizar_aluno(aluno, novo_aluno.cpf, novo_aluno.nome, novo_aluno.endereco);
+}
+
+
 Aluno *buscar_aluno(Aluno **alunos, int *posicao)
 {
     char matricula[50];
@@ -143,3 +155,13 @@ void imprimir_endereco(Endereco *endereco)
     printf("Cidade: %s", endereco->cidade);
     printf("Estado: %s", endereco->estado);
 }
+
+// Professor *atualizar_professor(Professor *professor){
+//     Professor novo_professor;
+//     printf("CPF\t>");
+//     fgets(novo_professor.cpf, 12, stdin);
+//     printf("Nome\t>");
+//     fgets(novo_professor.nome, 50, stdin);
+//     novo_professor.endereco = construir_endereco();
+//     return atualizar_professor(professor, novo_professor.cpf, novo_professor.nome, novo_professor.endereco);
+// }
