@@ -29,8 +29,15 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
                 }
             }
             Aluno *aluno = construir_aluno();
-            alunos[i] = aluno;
-            *qtd_atual_aluno++;
+            if verificar_matricula(alunos, aluno->matricula)
+            {
+                printf("Matricula já cadastrada!!\n");
+                break;
+            }
+            else {
+                alunos[i] = aluno;
+                *qtd_atual_aluno++;
+            }
         }
         break;
     case 2:
@@ -395,6 +402,20 @@ Aluno *buscar_aluno(Aluno **alunos, int *posicao)
         }
     }
     *posicao = pos_resultado;
+    return resultado;
+}
+
+Aluno *verificar_matricula(Aluno **alunos, char *matricula)
+{
+    Aluno *resultado = NULL;
+    for (int i = 0; i < MAX_ALUNO; i++)
+    {
+        if (alunos[i] && !strcmp(matricula, alunos[i]->matricula))
+        {
+            resultado = alunos[i];
+            break;
+        }
+    }
     return resultado;
 }
 
