@@ -108,13 +108,13 @@ Aluno *construir_aluno()
 
 Aluno *atualizar_aluno(Aluno *aluno)
 {
-    Aluno novo_aluno;
+    Aluno novo_a;
     printf("CPF\t>");
-    fgets(novo_aluno.cpf, 12, stdin);
+    fgets(novo_a.cpf, 12, stdin);
     printf("Nome\t>");
-    fgets(novo_aluno.nome, 50, stdin);
-    novo_aluno.endereco = construir_endereco();
-    return atualizar_aluno(aluno, novo_aluno.cpf, novo_aluno.nome, novo_aluno.endereco);
+    fgets(novo_a.nome, 49, stdin);
+    novo_a.endereco = construir_endereco();
+    return atualizar_aluno(aluno, &novo_a);
 }
 
 
@@ -157,11 +157,11 @@ void imprimir_endereco(Endereco *endereco)
 }
 
 // Professor *atualizar_professor(Professor *professor){
-//     Professor novo_professor;
+//     Professor novo_pof;
 //     printf("CPF\t>");
-//     fgets(novo_professor.cpf, 12, stdin);
+//     fgets(novo_prof.cpf, 12, stdin);
 //     printf("Nome\t>");
-//     fgets(novo_professor.nome, 50, stdin);
-//     novo_professor.endereco = construir_endereco();
-//     return atualizar_professor(professor, novo_professor.cpf, novo_professor.nome, novo_professor.endereco);
+//     fgets(novo_prof.nome, 49, stdin);
+//     novo_prof.endereco = construir_endereco();
+//     return atualizar_prof(professor, novo_prof.cpf, novo_prof.nome, novo_prof.endereco);
 // }
