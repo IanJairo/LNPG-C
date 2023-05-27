@@ -55,8 +55,28 @@ void destruirAluno(Aluno *aluno)
     }
 }
 
+Aluno *atualizarAluno(Aluno *aluno, Aluno *novo_aluno)
+{
+    if (aluno && novo_aluno)
+    {
+        strcpy(aluno->cpf, novo_aluno->cpf);
+        strcpy(aluno->nome, novo_aluno->nome);
+        aluno->endereco = novo_aluno->endereco;
+    }
+    return aluno;
+}
+
 void destruirEndereco(Endereco *endereco)
 {
     if (endereco)
         free(endereco);
 }
+
+// Professor *atualiuzarProfessor(Professor *professor, Professor *novo_professor) {
+//     if (professor && novo_professor) {
+//         strcpy(professor->cpf, novo_professor->cpf);
+//         strcpy(professor->nome, novo_professor->nome);
+//         professor->endereco = novo_professor->endereco;
+//     }
+//     return professor;
+// }
