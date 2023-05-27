@@ -41,7 +41,7 @@ int menu_crud_aluno()
     printf("3 - Atualizar aluno\n");
     printf("4 - Excluir aluno\n");
     printf("5 - Voltar menu anterior\n");
-    
+
     do
     {
         printf("Opcao: ");
@@ -93,8 +93,17 @@ int menu_crud_turma()
     printf("1 - Adicionar turma\n");
     printf("2 - Buscar turma\n");
     printf("3 - Atualizar turma\n");
-    printf("4 - Excluir turma\n");
-    printf("5 - Voltar menu anterior\n");
+    printf("4 - Excluir turma\n\n");
+
+    printf("== Vinculo do Aluno ==\n");
+    printf("5 - Adicionar aluno\n");
+    printf("6 - Remover aluno\n\n");
+
+    printf("== Vinculo do Professor ==\n");
+    printf("7 - Adicionar/Alterar professor\n");
+    printf("8 - Remover professor\n");
+    printf("9 - Voltar menu anterior\n\n");
+    
     do
     {
         printf("Opcao: ");

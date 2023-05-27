@@ -4,6 +4,7 @@
 #include "constantes.h"
 #include <string.h>
 
+// Funções do aluno
 void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
 {
     int opcao = menu_crud_aluno();
@@ -142,4 +143,194 @@ void imprimir_endereco(Endereco *endereco)
     printf("Bairro: %s", endereco->bairro);
     printf("Cidade: %s", endereco->cidade);
     printf("Estado: %s", endereco->estado);
+}
+
+// FUNÇÕES DA TURMA
+void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores, int *qtd_atual_turma)
+{
+    int opcao = menu_crud_turma();
+    Turma *turma = NULL;
+    Aluno *aluno = NULL;
+    Professor *professor = NULL;
+
+    switch (opcao)
+    {
+    case 1:
+
+        if (*qtd_atual_turma >= MAX_TURMA)
+        {
+            printf("Número máximo de turmas atingido\n");
+        }
+        else
+        {
+            int i = 0;
+            for (; i <= *qtd_atual_turma; i++)
+            {
+                if (turmas[i] == NULL)
+                {
+                    break;
+                }
+            }
+            Turma *turma = construir_turma();
+            turmas[i] = turma;
+            *qtd_atual_turma = *qtd_atual_turma + 1;
+        }
+        break;
+    case 2:
+    {
+        int posicao = 0;
+        turma = buscar_turma(turmas, &posicao);
+        if (turma)
+        {
+            imprimir_turma(turma);
+        }
+        else
+        {
+            printf("Turma não encontrada!!\n");
+        }
+        break;
+    }
+    case 3:
+    {
+        int posicao = 0;
+        turma = buscar_turma(turmas, &posicao);
+        if (turma)
+        {
+            atualizar_turma(turma);
+            printf("Turma atualizada com sucesso!\n");
+        }
+        else
+        {
+            printf("Turma não encontrada!!\n");
+        }
+        break;
+    }
+    case 4:
+    {
+        int posicao = 0;
+        turma = buscar_turma(turmas, &posicao);
+        if (turma)
+        {
+            destruirTurma(turma);
+            turmas[posicao] = NULL;
+            *qtd_atual_turma = *qtd_atual_turma - 1;
+            printf("Turma destruida\n");
+        }
+        else
+        {
+            printf("Turma não encontrada!!\n");
+        }
+        break;
+    }
+    case 5:
+    {
+        int posicao = 0;
+        turma = buscar_turma(turmas, &posicao);
+        if (turma)
+        {
+            posicao = 0;
+            aluno = buscar_aluno(alunos, &posicao);
+
+            if (aluno)
+            {
+                adicionarAluno(turma, aluno);
+                printf("O cadastro do aluno foi um sucesso!\n");
+            }
+            else
+            {
+                printf("Nao foi encontrado nenhum aluno!!\n");
+            }
+        }
+        else
+        {
+            printf("Não foi encontrada nenhuma turma com !!\n");
+        }
+        break;
+    }
+    case 6:
+    {
+
+        int posicao = 0;
+        turma = buscar_turma(turmas, &posicao);
+
+        // Verifica se a turma existe
+        if (turma) 
+        {
+            // Verifica se a turma possui alunos
+            if (turma->lista_alunos)
+            {
+                // Busca o aluno
+                posicao = 0;
+                aluno = buscar_aluno(turma->lista_alunos, &posicao);
+
+                // Verifica se o aluno existe
+                if (aluno)
+                {
+                    // Remove o aluno da turma
+                    removerAluno(turma, aluno);
+                    printf("Aluno removido com sucesso!\n");
+                }
+                else
+                {
+                    printf("Aluno não encontrado!!\n");
+                }
+            }
+            else
+            {
+                printf("Turma não possui alunos cadastrados!!\n");
+            }
+        }
+        break;
+    }
+    case 7:
+    {
+        int posicao = 0;
+        turma = buscar_turma(turmas, &posicao);
+        if (turma)
+        {
+            posicao = 0;
+            professor = buscar_professor(professores, &posicao);
+
+            if (professor)
+            {
+                adicionarProfessor(turma, professor);
+                printf("Professor adicionado a turma com sucesso!\n");
+            }
+            else
+            {
+                printf("Professor não encontrado no sistema!!\n");
+            }
+        }
+        else
+        {
+            printf("Turma não encontrada no sistema!!\n");
+        }
+        break;
+    }
+    case 8:
+    {
+        int posicao = 0;
+        turma = buscar_turma(turmas, &posicao);
+        if (turma)
+        {
+            if (turma->professor)
+            {
+                turma->professor = NULL;
+                printf("Professor removido com sucesso!\n");
+            }
+            else
+            {
+                printf("Turma não possui professor cadastrado!!\n");
+            }
+        }
+        else
+        {
+            printf("Turma não encontrada no sistema!!\n");
+        }
+        break;
+    }
+    default:
+        printf("Retornando ao menu principal\n");
+        break;
+    }
 }

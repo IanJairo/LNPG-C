@@ -60,3 +60,85 @@ void destruirEndereco(Endereco *endereco)
     if (endereco)
         free(endereco);
 }
+
+
+
+/* --- Turma --- */
+
+Turma *atualizarTurma(Turma *turma, Turma *nova_turma)
+{
+    if (turma && nova_turma)
+    {
+        strcpy(turma->nome_disciplina, nova_turma->nome_disciplina);
+        turma->media_turma = nova_turma->media_turma;
+    }
+    return turma;
+}
+
+Turma *criarTurma(char *codigo_turma,
+                  char *nome_disciplina,
+                  float media_turma) 
+{
+    Turma *turma = (Turma *)malloc(sizeof(Turma));
+    if(turma)
+    {
+        strcpy(turma->codigo, codigo_turma);
+        strcpy(turma->nome_disciplina, nome_disciplina);
+        turma->professor = NULL;
+        turma->media_turma = media_turma;
+        turma->qtd_alunos = 0;
+    }
+    else 
+    {
+        perror("Não há memória disponível. Encerrando\n\n");
+    }
+
+    return turma;
+}
+
+Turma *adicionarAluno(Turma *turma, Aluno *aluno) 
+{
+    if (turma && aluno) 
+    {
+        turma->lista_alunos[turma->qtd_alunos] = aluno;
+        turma->qtd_alunos += 1;
+    }
+    return turma;
+}
+
+// adicionar a função destruirAluno dentro da turma
+
+Turma *destruirAluno(Turma *turma, Aluno  *aluno)
+{
+    if (turma && aluno)
+    {
+        int i = 0;
+        for (i = 0; i < turma->qtd_alunos; i++)
+        {
+            if (turma->lista_alunos[i] == aluno)
+            {
+                turma->lista_alunos[i] = NULL;
+                turma->qtd_alunos -= 1;
+                return turma;
+            }
+        }
+    }
+    return NULL;
+}
+
+void destruirTurma(Turma *turma)
+{
+    if (turma)
+        free(turma);
+}
+
+Turma *adicionarProfessor(Turma *turma, Professor *professor)
+{
+    turma->professor = (Professor *)realloc(turma->professor, sizeof(Professor));
+    if (turma && professor)
+    {
+        turma->professor = professor;
+    }
+
+    return turma;
+}

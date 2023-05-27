@@ -8,9 +8,12 @@ int main(int argc, char const *argv[])
 {
     int op_menu_principal = 0;
     Aluno *alunos[MAX_ALUNO] = {NULL};
+    Professor *professores[MAX_PROFESSOR] = {NULL};
+    Turma *turmas[MAX_TURMA] = {NULL};
 
     int qtd_atual_aluno = 0;
-
+    int qtd_atual_professor = 0;
+    int qtd_atual_turma = 0;
     do
     {
         op_menu_principal = menu_principal();
@@ -23,7 +26,7 @@ int main(int argc, char const *argv[])
             tratador_menu_professor();
             break;
         case 3:
-            tratador_menu_turma();
+            tratador_menu_turma(turmas, alunos, professores, &qtd_atual_turma);
             break;
         case 4:
             printf("Finalizando app...\n\n");
