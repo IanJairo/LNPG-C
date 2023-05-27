@@ -17,25 +17,13 @@ typedef struct
     char nome[50];
     Endereco *endereco;
 } Aluno;
-
-Endereco *criarEndereco(char *logradouro,
-                        char *bairro,
-                        char *cidade,
-                        char *estado,
-                        char *numero);
-
-Aluno *criarAluno(char *matricula,
-                  char *cpf,
-                  char *nome,
-                  Endereco *end);
-
-void destruirAluno(Aluno *aluno);
-void destruirEndereco(Endereco *);
-
-
-/* --- Turma --- */
-
-
+typedef struct
+{
+    char matricula[10];
+    char nome[50];
+    char cpf[13];
+    Endereco *endereco;
+} Professor;
 typedef struct 
 {
     char codigo[50];
@@ -47,6 +35,31 @@ typedef struct
 } Turma;
 
 
+Endereco *criarEndereco(char *logradouro,
+                        char *bairro,
+                        char *cidade,
+                        char *estado,
+                        char *numero);
+
+/*  =================================== ALUNOS ==   */
+Aluno *criarAluno(char *matricula,
+                  char *cpf,
+                  char *nome,
+                  Endereco *end);
+
+void destruirAluno(Aluno *aluno);
+void destruirEndereco(Endereco *);
+
+/*  =================================== PROFESSORES ==   */
+
+Professor *criarProfessor(char *matricula, char *cpf, char *nome, Endereco *end);
+
+Professor *atualizarProfessor(Professor *professor, Professor *novo_professor);
+
+void destruirProfessor(Professor *professor);
+
+
+/*  =================================== TURMAS ==   */
 Turma *atualizarTurma(Turma *turma, Turma *nova_turma);
 
 Turma *criarTurma(char *codigo_turma,
@@ -59,22 +72,5 @@ Turma *excluirAluno(Turma *turma, Aluno *aluno);
 void destruirTurma(Turma *turma);
 
 Turma *adicionarProfessor(Turma *turma, Professor *professor);
-
-/* --- Professor --- */
-
-typedef struct
-{
-    char matricula[10];
-    char nome[50];
-    char cpf[12];
-    Endereco *endereco;
-} Professor;
-
-
-Professor *criarProfessor(char *matricula, char *cpf, char *nome, Endereco *end);
-
-Professor *atualizarProfessor(Professor *professor, Professor *novo_professor);
-
-void destruirProfessor(Professor *professor);
 
 #endif

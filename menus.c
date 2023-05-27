@@ -100,8 +100,9 @@ int menu_crud_turma()
     printf("6 - Remover aluno\n\n");
 
     printf("== Vinculo do Professor ==\n");
-    printf("7 - Adicionar/Alterar professor\n");
-    printf("8 - Remover professor\n");
+    printf("7 - Adicionar professor\n");
+    printf("8 - Remover professor\n\n");
+    
     printf("9 - Voltar menu anterior\n\n");
     
     do
@@ -109,7 +110,7 @@ int menu_crud_turma()
         printf("Opcao: ");
         scanf("%d", &opcao);
         getchar();
-        if (opcao > 0 && opcao < 6)
+        if (opcao > 0 && opcao < 10)
         {
             return opcao;
         }

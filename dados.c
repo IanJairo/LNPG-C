@@ -142,9 +142,9 @@ Turma *adicionarAluno(Turma *turma, Aluno *aluno)
     return turma;
 }
 
-// adicionar a função destruirAluno dentro da turma
+// adicionar a função excluirAluno dentro da turma
 
-Turma *destruirAluno(Turma *turma, Aluno  *aluno)
+Turma *excluirAluno(Turma *turma, Aluno  *aluno)
 {
     if (turma && aluno)
     {
