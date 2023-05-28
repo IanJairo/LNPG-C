@@ -1,15 +1,17 @@
-#ifndef _DADOS_H_
-#define _DADOS_H_
+#ifndef _DADOS_H_ // Verifica se _DADOS_H_
+#define _DADOS_H_ // Define _DADOS_H_
 
-typedef struct
+typedef struct // Criação de um novo tipo de dados e armazenamento em uma STRUCT
 {
-    char logradouro[50];
-    char bairro[50];
-    char cidade[50];
-    char estado[10];
-    char numero[10];
+    char logradouro[50]; // Definindo uma matriz de tamanho máximo 50 caracteres
+    char bairro[50]; // Definindo uma matriz de tamanho máximo 50 caracteres
+    char cidade[50]; // Definindo uma matriz de tamanho máximo 50 caracteres
+    char estado[10]; // Definindo uma matriz de tamanho máximo 10 caracteres
+    char numero[10]; // Definindo uma matriz de tamanho máximo 10 caracteres
 } Endereco;
-
+/*  
+    Fazemos a mesma coisa para as outras 3 structs a seguir
+*/
 typedef struct
 {
     char matricula[10];
@@ -40,7 +42,7 @@ Endereco *criarEndereco(char *logradouro,
                         char *estado,
                         char *numero);
 
-/*  =================================== ALUNOS ==   */
+/*   CRUD ALUNOS    */
 Aluno *criarAluno(char *matricula,
                   char *cpf,
                   char *nome,
@@ -51,7 +53,7 @@ Aluno *atualizarAluno(Aluno *aluno, Aluno *novo_aluno);
 void destruirAluno(Aluno *aluno);
 void destruirEndereco(Endereco *);
 
-/*  =================================== PROFESSORES ==   */
+/*   CRUD PROFESSORES    */
 
 Professor *criarProfessor(char *matricula, char *cpf, char *nome, Endereco *end);
 
@@ -59,7 +61,7 @@ Professor *atualizarProfessor(Professor *professor, Professor *novo_professor);
 
 void destruirProfessor(Professor *professor);
 
-/*  =================================== TURMAS ==   */
+/*   CRUD TURMAS    */
 Turma *atualizarTurma(Turma *turma, Turma *nova_turma);
 
 Turma *criarTurma(char *codigo_turma,
@@ -73,4 +75,4 @@ void destruirTurma(Turma *turma);
 
 Turma *adicionarProfessor(Turma *turma, Professor *professor);
 
-#endif
+#endif // Fim do bloco condicional
