@@ -23,6 +23,19 @@ Aluno *criarAluno(char *matricula,
     return aluno;
 }
 
+Aluno *atualizarAluno(Aluno *aluno, Aluno *novo_aluno)
+{
+    if (aluno && novo_aluno)
+    {
+        strcpy(aluno->cpf, novo_aluno->cpf);
+        strcpy(aluno->nome, novo_aluno->nome);
+        aluno->endereco = novo_aluno->endereco;
+    }
+    return aluno;
+}
+
+
+
 void destruirAluno(Aluno *aluno)
 {
     if (aluno)

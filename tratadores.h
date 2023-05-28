@@ -17,6 +17,7 @@ void tratador_menu_estatistica(Turma **turmas, Professor **professores);
 
 Endereco *construir_endereco();
 Aluno *construir_aluno();
+Aluno *atualizar_aluno(Aluno *aluno);
 Aluno *buscar_aluno(Aluno **alunos, int *posicao);
 void imprimir_aluno(Aluno *aluno);
 void imprimir_endereco(Endereco *endereco);
