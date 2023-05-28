@@ -3,6 +3,7 @@
 #include "dados.h"
 #include <stdio.h>
 #include "constantes.h"
+#include <stdlib.h>
 
 int main(int argc, char const *argv[])
 {

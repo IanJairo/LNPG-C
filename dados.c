@@ -70,6 +70,7 @@ Professor *criarProfessor(char *matricula, char *nome, char *cpf, Endereco *end)
 {
     Professor *professor = (Professor *)malloc(sizeof(Professor));
     if(professor){
+        memset(professor, 0, sizeof(Professor));
         strcpy(professor->matricula, matricula);
         strcpy(professor->cpf, cpf);
         strcpy(professor->nome, nome);

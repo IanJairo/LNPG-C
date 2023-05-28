@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "constantes.h"
 #include <string.h>
+#include <stdlib.h>
 
 // Cases do aluno
 void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
@@ -28,7 +29,7 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
                     break;
                 }
             }
-            Aluno *aluno = construir_aluno();
+            /*Aluno *aluno = construir_aluno();
             if verificar_matricula(alunos, aluno->matricula)
             {
                 printf("Matricula já cadastrada!!\n");
@@ -37,7 +38,7 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
             else {
                 alunos[i] = aluno;
                 *qtd_atual_aluno++;
-            }
+            }*/
         }
         break;
     case 2:
@@ -97,17 +98,26 @@ void tratador_menu_professor(Professor **professores, int *qtd_atual_professor)
         }
         else
         {
-            int i = 0;
-            for (; i <= *qtd_atual_professor; i++)
+            professor = construir_professor();
+            if (professor)
             {
-                if (professores[i] == NULL)
+                for (int i = 0; i < *qtd_atual_professor; i++)
                 {
-                    break;
+                    if (strcmp(professores[i]->matricula, professor->matricula) == 0 ||
+                        strcmp(professores[i]->cpf, professor->cpf) == 0)
+                    {
+                        printf("Ja existe um professor com a mesma matricula ou CPF\n");
+                        free(professor);
+                        return;
+                    }
                 }
+                professores[*qtd_atual_professor] = professor;
+                (*qtd_atual_professor)++;
             }
-            Professor *professor = construir_professor();
-            professores[i] = professor;
-            *qtd_atual_professor = *qtd_atual_professor + 1;
+            else
+            {
+                printf("Falha ao criar professor. Não há memória disponível.\n");
+            }
         }
         break;
     case 2:
@@ -341,7 +351,7 @@ void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores
         }
         else
         {
-            printf("Turma não encontrada no sistema!!\n");
+            printf("Turma nao encontrada no sistema!!\n");
         }
         break;
     }
@@ -363,7 +373,7 @@ Endereco *construir_endereco()
     fgets(endereco.cidade, 49, stdin);
     printf("Estado\t> ");
     fgets(endereco.estado, 9, stdin);
-    printf("Número\t> ");
+    printf("Numero\t> ");
     fgets(endereco.numero, 9, stdin);
 
     return criarEndereco(endereco.logradouro, endereco.bairro, endereco.cidade, endereco.estado, endereco.numero);
@@ -373,7 +383,7 @@ Endereco *construir_endereco()
 Aluno *construir_aluno()
 {
     Aluno aluno;
-    printf("Matrícula\t> ");
+    printf("Matricula\t> ");
     fgets(aluno.matricula, 9, stdin);
     printf("CPF\t> ");
     fgets(aluno.cpf, 12, stdin);
@@ -383,11 +393,10 @@ Aluno *construir_aluno()
     return criarAluno(aluno.matricula, aluno.cpf, aluno.nome, aluno.endereco);
 }
 
-
 Aluno *buscar_aluno(Aluno **alunos, int *posicao)
 {
     char matricula[50];
-    printf("Matrícula > ");
+    printf("Matricula > ");
     fgets(matricula, 49, stdin);
     Aluno *resultado = NULL;
     int pos_resultado = -1;
@@ -440,16 +449,24 @@ void imprimir_endereco(Endereco *endereco)
 
 Professor *construir_professor()
 {
-    Professor professor;
-    printf("Matricula do professor\t>");
-    fgets(professor.matricula, 9, stdin);
-    printf("CPF do professor\t>");
-    fgets(professor.cpf, 12, stdin);
-    printf("Nome do professor\t>");
-    fgets(professor.nome, 49, stdin);
-    professor.endereco = construir_endereco();
-    return criarProfessor(professor.matricula, professor.cpf, professor.nome, professor.endereco);
+    Professor *professor = (Professor *)malloc(sizeof(Professor));
+    if (professor)
+    {
+        printf("Matricula do professor\t>");
+        fgets(professor->matricula, 10, stdin);
+        printf("CPF do professor\t>");
+        fgets(professor->cpf, 13, stdin);
+        printf("Nome do professor\t>");
+        fgets(professor->nome, 50, stdin);
+        professor->endereco = construir_endereco();
+    }
+    else
+    {
+        perror("Não há memória disponível. Encerrando\n\n");
+    }
+    return professor;
 }
+
 Professor *atualizar_professor(Professor *professor)
 {
     Professor novo_professor;
@@ -569,32 +586,35 @@ void adicionar_aluno(Turma *turma, Aluno *aluno)
 void tratador_menu_estatistica(Turma **turmas, Professor **professores)
 {
     int opcao = menu_estatistica();
-    switch(opcao){
-        case 1:
-            imprimir_nomes_professores(professores);
-            break;
-        case 2:
-            imprimir_professores_sem_turma(professores,turmas);
-            break;
-        case 3:
-            imprimir_media_turmas(turmas);
-            break;
-        case 4:
-            break;
+    switch (opcao)
+    {
+    case 1:
+        imprimir_nomes_professores(professores);
+        break;
+    case 2:
+        imprimir_professores_sem_turma(professores, turmas);
+        break;
+    case 3:
+        imprimir_media_turmas(turmas);
+        break;
+    case 4:
+        break;
     }
-    
 }
 
 void imprimir_nomes_professores(Professor **professores)
 {
-    if(professores[0] == NULL){
+    if (professores[0] == NULL)
+    {
         printf("Nenhum professor cadastrado!\n");
         return;
     }
     printf("=== Professores Cadastrados ===\n\n");
 
-    for (int i = 0; i < MAX_PROFESSOR; i++){
-        if(professores[i] == NULL){
+    for (int i = 0; i < MAX_PROFESSOR; i++)
+    {
+        if (professores[i] == NULL)
+        {
             printf("\n");
             return;
         }
@@ -604,7 +624,8 @@ void imprimir_nomes_professores(Professor **professores)
 
 void imprimir_professores_sem_turma(Professor **professores, Turma **turmas)
 {
-    if(professores[0] == NULL){
+    if (professores[0] == NULL)
+    {
         printf("Nenhum professor cadastrado!\n");
         return;
     }
@@ -612,52 +633,70 @@ void imprimir_professores_sem_turma(Professor **professores, Turma **turmas)
 
     int qtd_professores_sem_turma = 0;
     Professor *professores_sem_turma[MAX_PROFESSOR];
-    for(int i=0; i<MAX_PROFESSOR; i++){
-        if(professores[i] == NULL){
-                break;
+
+    for (int i = 0; i < MAX_PROFESSOR; i++)
+    {
+        if (professores[i] == NULL)
+        {
+            break;
         }
+
         int turma_encontrada = 0;
-        for(int i=0; i<MAX_TURMA; i++){
-            if(turmas[i] == NULL){
+
+        for (int j = 0; j < MAX_TURMA; j++)
+        {
+            if (turmas[j] == NULL)
+            {
                 break;
             }
-            if(turmas[i]->professor == professores[i]){
+            if (turmas[j]->professor == professores[i])
+            {
                 turma_encontrada = 1;
                 break;
             }
         }
-        if(!turma_encontrada){
-            //comentar oq ta roland aqui
+
+        if (!turma_encontrada)
+        {
             professores_sem_turma[qtd_professores_sem_turma] = professores[i];
-            ++qtd_professores_sem_turma;
+            qtd_professores_sem_turma++;
         }
     }
-    if(professores_sem_turma[0 == NULL]){
+
+    if (professores_sem_turma[0] == NULL)
+    {
         printf("Todos os professores possuem uma turma!\n\n");
         return;
     }
-    for(int i=0; i<qtd_professores_sem_turma; i++){
-        if(professores_sem_turma[i] == NULL){
+
+    for (int i = 0; i < qtd_professores_sem_turma; i++)
+    {
+        if (professores_sem_turma[i] == NULL)
+        {
             break;
         }
         printf("%s", professores_sem_turma[i]->matricula);
     }
 }
+
 void imprimir_media_turmas(Turma **turmas)
 {
-    if(turmas[0] == NULL){
+    if (turmas[0] == NULL)
+    {
         printf("Nenhuma turma cadastrada!\n\n");
         return;
     }
     float soma = 0.0;
     int qtd_turmas = 0;
-    for(int i=0; i<MAX_TURMA; i++){
-        if(turmas[i] == NULL){
+    for (int i = 0; i < MAX_TURMA; i++)
+    {
+        if (turmas[i] == NULL)
+        {
             break;
         }
-        //explicar isso
+        // explicar isso
         ++qtd_turmas;
         soma += turmas[i]->media_turma;
     }
-    printf("Note media de todas as turmas cadastradas: %.2f\n\n", soma/qtd_turmas);
+    printf("Note media de todas as turmas cadastradas: %.2f\n\n", soma / qtd_turmas);
 }

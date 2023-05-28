@@ -20,7 +20,7 @@ Aluno *construir_aluno();
 Aluno *buscar_aluno(Aluno **alunos, int *posicao);
 void imprimir_aluno(Aluno *aluno);
 void imprimir_endereco(Endereco *endereco);
-Aluno *verificar_matricula(Aluno **alunos, char *matricula)
+Aluno *verificar_matricula(Aluno **alunos, char *matricula);
 
 
 /*

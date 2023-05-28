@@ -20,8 +20,8 @@ typedef struct
 typedef struct
 {
     char matricula[10];
-    char nome[50];
     char cpf[13];
+    char nome[50];
     Endereco *endereco;
 } Professor;
 typedef struct 
