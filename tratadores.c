@@ -6,7 +6,19 @@
 #include <stdlib.h>
 
 // Cases do aluno
-void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
+int alunoEstaNaTurma(Aluno *aluno, Turma *turma)
+{
+    for (int i = 0; i < turma->qtd_alunos; i++)
+    {
+        if (strcmp(aluno->matricula, turma->lista_alunos[i]->matricula) == 0)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
 {
     int opcao = menu_crud_aluno();
     Aluno *aluno = NULL;
@@ -29,16 +41,27 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
                     break;
                 }
             }
-            /*Aluno *aluno = construir_aluno();
-            if verificar_matricula(alunos, aluno->matricula)
+            Aluno *aluno = construir_aluno();
+            if (aluno)
             {
-                printf("Matricula já cadastrada!!\n");
-                break;
+                for (int i = 0; i < *qtd_atual_aluno; i++)
+                {
+                    if (strcmp(alunos[i]->matricula, aluno->matricula) == 0 ||
+                        strcmp(alunos[i]->cpf, aluno->cpf) == 0)
+                    {
+                        printf("Ja existe um aluno com a mesma matricula ou CPF\n");
+                        free(aluno);
+                        return;
+                    }
+                }
+                alunos[*qtd_atual_aluno] = aluno;
+                (*qtd_atual_aluno)++;
+                printf("Aluno Criado com sucesso!\n");
             }
-            else {
-                alunos[i] = aluno;
-                *qtd_atual_aluno++;
-            }*/
+            else
+            {
+                printf("Falha ao criar professor. Não há memória disponível.\n");
+            }
         }
         break;
     case 2:
@@ -62,22 +85,39 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
 
     break;
     case 4:
+{
+    int posicao = 0;
+    aluno = buscar_aluno(alunos, &posicao);
+    if (aluno)
     {
-        int posicao = 0;
-        aluno = buscar_aluno(alunos, &posicao);
-        if (aluno)
+        // Verificar se o aluno está associado a alguma turma
+        int associado = 0;
+        for (int i = 0; i < MAX_TURMA; i++)
         {
-            destruirAluno(aluno);
-            alunos[posicao] = NULL;
-            printf("Aluno destruido\n");
+            if (turmas[i] && alunoEstaNaTurma(aluno, turmas[i]))
+            {
+                associado = 1;
+                break;
+            }
+        }
+
+        if (associado)
+        {
+            printf("Não é possível excluir o aluno. Ele está associado a uma turma.\n");
         }
         else
         {
-            printf("Aluno não encontrado!!\n");
+            destruirAluno(aluno);
+            alunos[posicao] = NULL;
+            printf("Aluno excluído!\n");
         }
     }
-
-    break;
+    else
+    {
+        printf("Aluno não encontrado!\n");
+    }
+}
+break;
     default:
         printf("Retornando ao menu principal\n");
         break;
@@ -411,20 +451,6 @@ Aluno *buscar_aluno(Aluno **alunos, int *posicao)
         }
     }
     *posicao = pos_resultado;
-    return resultado;
-}
-
-Aluno *verificar_matricula(Aluno **alunos, char *matricula)
-{
-    Aluno *resultado = NULL;
-    for (int i = 0; i < MAX_ALUNO; i++)
-    {
-        if (alunos[i] && !strcmp(matricula, alunos[i]->matricula))
-        {
-            resultado = alunos[i];
-            break;
-        }
-    }
     return resultado;
 }
 

@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
         switch (op_menu_principal)
         {
         case 1:
-            tratador_menu_aluno(alunos, &qtd_atual_aluno);
+            tratador_menu_aluno(alunos, &qtd_atual_aluno, turmas);
             break;
         case 2:
             tratador_menu_professor(professores, &qtd_atual_professor);
