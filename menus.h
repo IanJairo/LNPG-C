@@ -1,10 +1,12 @@
-#ifndef _MENUS_H_
-#define _MENUS_H_
+#ifndef _MENUS_H_ // Verifica se _MENUS_H_ já foi definido
+#define _MENUS_H_ // Define caso não tenha sido
 
-int menu_principal();
-int menu_crud_aluno();
-int menu_crud_professor();
-int menu_crud_turma();
-int menu_estatistica();
+// 5 declarações para funções que serão utilizadas em nosso código
+int menu_principal(); // Menu Principal
+int menu_crud_aluno(); // Menu do CRUD do Aluno
+int menu_crud_professor(); // Menu do CRUD do professor
+int menu_crud_turma(); // Menu do CRUD da Turma
+int menu_estatistica(); // Menu do CRUD de Estatística
 
-#endif
+#endif // Fim do bloco condicional.
+
