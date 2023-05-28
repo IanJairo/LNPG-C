@@ -18,8 +18,12 @@ int alunoEstaNaTurma(Aluno *aluno, Turma *turma)
 }
 
 // Cases do aluno
+
 void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
 {
+    int qtd_alunos;
+    Aluno **alunos_arquivo = recuperar_alunos_do_arquivo("alunos.txt", &qtd_alunos);
+
     int opcao = menu_crud_aluno();
     Aluno *aluno = NULL;
     switch (opcao)
@@ -31,36 +35,26 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
         }
         else
         {
-            // Passo 1: buscar posicao disponível
-            int i = 0;
-            for (; i < *qtd_atual_aluno; i++)
-            {
-                if (alunos[i] != NULL)
-                {
-                    // significa que esta posição está livre para uso
-                    break;
-                }
-            }
-            Aluno *aluno = construir_aluno();
+            aluno = construir_aluno();
             if (aluno)
             {
                 for (int i = 0; i < *qtd_atual_aluno; i++)
                 {
-                    if (strcmp(alunos[i]->matricula, aluno->matricula) == 0 ||
-                        strcmp(alunos[i]->cpf, aluno->cpf) == 0)
+                    if (strcmp(alunos[i]->matricula, aluno->matricula) == 0)
                     {
-                        printf("Ja existe um aluno com a mesma matricula ou CPF\n");
+                        printf("Já existe um aluno com a mesma matrícula\n");
                         free(aluno);
                         return;
                     }
                 }
                 alunos[*qtd_atual_aluno] = aluno;
                 (*qtd_atual_aluno)++;
-                printf("Aluno Criado com sucesso!\n");
+                persistir_alunos_em_arquivo(alunos, *qtd_atual_aluno, "alunos.txt"); // Chamar a função para persistir os dados
+                printf("Aluno adicionado com sucesso\n");
             }
             else
             {
-                printf("Falha ao criar professor. Não há memória disponível.\n");
+                printf("Falha ao criar aluno. Não há memória disponível.\n");
             }
         }
         break;
@@ -77,7 +71,6 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
             printf("Aluno não encontrado!!\n");
         }
     }
-    break;
     case 3:
     {
         // criar a função de atualizar aluno
@@ -134,6 +127,31 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
         printf("Retornando ao menu principal\n");
         break;
     }
+}
+
+void persistir_alunos_em_arquivo(Aluno **alunos, int qtd_atual_aluno, const char *nome_arquivo)
+{
+    FILE *arquivo = fopen(nome_arquivo, "w");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    for (int i = 0; i < qtd_atual_aluno; i++)
+    {
+        Aluno *aluno = alunos[i];
+        fprintf(arquivo, "Matrícula: %s\n", aluno->matricula);
+        fprintf(arquivo, "CPF: %s\n", aluno->cpf);
+        fprintf(arquivo, "Nome: %s\n", aluno->nome);
+        fprintf(arquivo, "Endereço: %s\n", aluno->endereco->logradouro);
+        fprintf(arquivo, "Cidade: %s\n", aluno->endereco->cidade);
+        fprintf(arquivo, "Estado: %s\n", aluno->endereco->estado);
+        fprintf(arquivo, "\n");
+    }
+
+    fclose(arquivo);
+    printf("Dados dos alunos foram salvos no arquivo.\n");
 }
 
 // Cases do professor
@@ -480,7 +498,6 @@ Aluno *atualizar_aluno(Aluno *aluno)
     fgets(novo_aluno.nome, 49, stdin);
     novo_aluno.endereco = construir_endereco();
     return atualizarAluno(aluno, &novo_aluno);
-
 }
 Aluno *buscar_aluno(Aluno **alunos, int *posicao)
 {

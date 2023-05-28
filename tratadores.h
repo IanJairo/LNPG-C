@@ -3,7 +3,7 @@
 
 #include "dados.h"
 
-void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno);
+void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas);
 void tratador_menu_professor(Professor **professores, int *qtd_atual_professor, Turma **turmas);
 void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores, int *qtd_atual_turma);
 void tratador_menu_estatistica(Turma **turmas, Professor **professores);
@@ -22,6 +22,7 @@ Aluno *buscar_aluno(Aluno **alunos, int *posicao);
 void imprimir_aluno(Aluno *aluno);
 void imprimir_endereco(Endereco *endereco);
 Aluno *verificar_matricula(Aluno **alunos, char *matricula);
+void persistir_alunos_em_arquivo(Aluno **alunos, int qtd_atual_aluno, const char *nome_arquivo);
 
 
 /*
