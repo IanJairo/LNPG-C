@@ -39,7 +39,7 @@ Aluno *atualizarAluno(Aluno *aluno, Aluno *novo_aluno)
 void destruirAluno(Aluno *aluno)
 {
     if (aluno)
-    {   
+    {
         Endereco *end = aluno->endereco;
         destruirEndereco(end);
         free(aluno);
@@ -105,7 +105,7 @@ Professor *atualizarProfessor(Professor *professor, Professor *novo_professor)
 
 void destruirProfessor(Professor *professor)
 {
-    if (professor) {
+    if(professor){
         Endereco *end = professor->endereco;
         destruirEndereco(end);
         free(professor);
