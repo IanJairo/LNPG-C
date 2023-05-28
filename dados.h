@@ -24,7 +24,7 @@ typedef struct
     char nome[50];
     Endereco *endereco;
 } Professor;
-typedef struct 
+typedef struct
 {
     char codigo[50];
     char nome_disciplina[50];
@@ -33,7 +33,6 @@ typedef struct
     float media_turma;
     int qtd_alunos;
 } Turma;
-
 
 Endereco *criarEndereco(char *logradouro,
                         char *bairro,
@@ -47,6 +46,8 @@ Aluno *criarAluno(char *matricula,
                   char *nome,
                   Endereco *end);
 
+Aluno *atualizarAluno(Aluno *aluno, Aluno *novo_aluno);
+
 void destruirAluno(Aluno *aluno);
 void destruirEndereco(Endereco *);
 
@@ -57,7 +58,6 @@ Professor *criarProfessor(char *matricula, char *cpf, char *nome, Endereco *end)
 Professor *atualizarProfessor(Professor *professor, Professor *novo_professor);
 
 void destruirProfessor(Professor *professor);
-
 
 /*  =================================== TURMAS ==   */
 Turma *atualizarTurma(Turma *turma, Turma *nova_turma);
