@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
             tratador_menu_aluno(alunos, &qtd_atual_aluno);
             break;
         case 2:
-            tratador_menu_professor(professores, &qtd_atual_professor);
+            tratador_menu_professor(professores, &qtd_atual_professor, turmas);
             break;
         case 3:
             tratador_menu_turma(turmas, alunos, professores, &qtd_atual_turma);

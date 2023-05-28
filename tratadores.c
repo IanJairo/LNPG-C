@@ -85,7 +85,7 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
 }
 
 // Cases do professor
-void tratador_menu_professor(Professor **professores, int *qtd_atual_professor)
+void tratador_menu_professor(Professor **professores, int *qtd_atual_professor, Turma **turmas)
 {
     int opcao = menu_crud_professor();
     Professor *professor = NULL;
@@ -154,10 +154,28 @@ void tratador_menu_professor(Professor **professores, int *qtd_atual_professor)
         professor = buscar_professor(professores, &posicao);
         if (professor)
         {
-            destruirProfessor(professor);
-            professores[posicao] = NULL;
-            *qtd_atual_professor = *qtd_atual_professor - 1;
-            printf("Professor exlcluído!\n");
+            // Verificar se o professor está associado a alguma turma
+            int associado = 0;
+            for (int i = 0; i < MAX_TURMA; i++)
+            {
+                if (turmas[i] && strcmp(turmas[i]->professor->matricula, professor->matricula) == 0)
+                {
+                    associado = 1;
+                    break;
+                }
+            }
+
+            if (associado)
+            {
+                printf("Nao e possivel excluir o professor. Ele esta associado a uma turma.\n");
+            }
+            else
+            {
+                destruirProfessor(professor);
+                professores[posicao] = NULL;
+                (*qtd_atual_professor)--;
+                printf("Professor excluído!\n");
+            }
         }
         else
         {
@@ -182,24 +200,31 @@ void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores
     switch (opcao)
     {
     case 1:
-
         if (*qtd_atual_turma >= MAX_TURMA)
         {
             printf("Número máximo de turmas atingido\n");
         }
         else
         {
-            int i = 0;
-            for (; i <= *qtd_atual_turma; i++)
+            turma = construir_turma();
+            if (turma)
             {
-                if (turmas[i] == NULL)
+                for (int i = 0; i < *qtd_atual_turma; i++)
                 {
-                    break;
+                    if (strcmp(turmas[i]->codigo, turma->codigo) == 0)
+                    {
+                        printf("Ja existe uma turma com o mesmo codigo\n");
+                        free(turma);
+                        return;
+                    }
                 }
+                turmas[*qtd_atual_turma] = turma;
+                (*qtd_atual_turma)++;
             }
-            Turma *turma = construir_turma();
-            turmas[i] = turma;
-            *qtd_atual_turma = *qtd_atual_turma + 1;
+            else
+            {
+                printf("Falha ao criar turma. Nao ha memoria disponivel.\n");
+            }
         }
         break;
     case 2:
@@ -509,15 +534,22 @@ void imprimir_professor(Professor *professor)
 
 Turma *construir_turma()
 {
-    Turma turma;
-    printf("Codigo da turma\t> ");
-    fgets(turma.codigo, 50, stdin);
-    printf("Nome da disciplina\t> ");
-    fgets(turma.nome_disciplina, 50, stdin);
-    printf("Media\t> ");
-    scanf("%f", &turma.media_turma);
-    getchar();
-    return criarTurma(turma.codigo, turma.nome_disciplina, turma.media_turma);
+    Turma *turma = (Turma *)malloc(sizeof(Turma));
+    if (turma)
+    {
+        printf("Codigo da turma\t> ");
+        fgets(turma->codigo, 50, stdin);
+        printf("Nome da disciplina\t> ");
+        fgets(turma->nome_disciplina, 50, stdin);
+        printf("Media\t> ");
+        scanf("%f", &(turma->media_turma));
+        getchar();
+    }
+    else
+    {
+        perror("Não há memória disponível. Encerrando\n\n");
+    }
+    return turma;
 }
 
 Turma *buscar_turma(Turma **turmas, int *posicao)
@@ -698,5 +730,5 @@ void imprimir_media_turmas(Turma **turmas)
         ++qtd_turmas;
         soma += turmas[i]->media_turma;
     }
-    printf("Note media de todas as turmas cadastradas: %.2f\n\n", soma / qtd_turmas);
+    printf("Nota media de todas as turmas cadastradas: %.2f\n\n", soma / qtd_turmas);
 }

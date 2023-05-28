@@ -4,7 +4,7 @@
 #include "dados.h"
 
 void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno);
-void tratador_menu_professor(Professor **professores, int *qtd_atual_professor);
+void tratador_menu_professor(Professor **professores, int *qtd_atual_professor, Turma **turmas);
 void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores, int *qtd_atual_turma);
 void tratador_menu_estatistica(Turma **turmas, Professor **professores);
 
