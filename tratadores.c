@@ -5,8 +5,20 @@
 #include <string.h>
 #include <stdlib.h>
 
+int alunoEstaNaTurma(Aluno *aluno, Turma *turma)
+{
+    for (int i = 0; i < turma->qtd_alunos; i++)
+    {
+        if (strcmp(aluno->matricula, turma->lista_alunos[i]->matricula) == 0)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 // Cases do aluno
-void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
+void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
 {
     int opcao = menu_crud_aluno();
     Aluno *aluno = NULL;
@@ -30,17 +42,26 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
                 }
             }
             Aluno *aluno = construir_aluno();
-            alunos[i] = aluno;
-            *qtd_atual_aluno++;
-            // if verificar_matricula(alunos, aluno->matricula)
-            // {
-            //     printf("Matricula já cadastrada!!\n");
-            //     break;
-            // }
-            // else {
-            //     alunos[i] = aluno;
-            //     *qtd_atual_aluno++;
-            // }*/
+            if (aluno)
+            {
+                for (int i = 0; i < *qtd_atual_aluno; i++)
+                {
+                    if (strcmp(alunos[i]->matricula, aluno->matricula) == 0 ||
+                        strcmp(alunos[i]->cpf, aluno->cpf) == 0)
+                    {
+                        printf("Ja existe um aluno com a mesma matricula ou CPF\n");
+                        free(aluno);
+                        return;
+                    }
+                }
+                alunos[*qtd_atual_aluno] = aluno;
+                (*qtd_atual_aluno)++;
+                printf("Aluno Criado com sucesso!\n");
+            }
+            else
+            {
+                printf("Falha ao criar professor. Não há memória disponível.\n");
+            }
         }
         break;
     case 2:
@@ -81,16 +102,33 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno)
         aluno = buscar_aluno(alunos, &posicao);
         if (aluno)
         {
-            destruirAluno(aluno);
-            alunos[posicao] = NULL;
-            printf("Aluno destruido\n");
+            // Verificar se o aluno está associado a alguma turma
+            int associado = 0;
+            for (int i = 0; i < MAX_TURMA; i++)
+            {
+                if (turmas[i] && alunoEstaNaTurma(aluno, turmas[i]))
+                {
+                    associado = 1;
+                    break;
+                }
+            }
+
+            if (associado)
+            {
+                printf("Não é possível excluir o aluno. Ele está associado a uma turma.\n");
+            }
+            else
+            {
+                destruirAluno(aluno);
+                alunos[posicao] = NULL;
+                printf("Aluno excluído!\n");
+            }
         }
         else
         {
-            printf("Aluno não encontrado!!\n");
+            printf("Aluno não encontrado!\n");
         }
     }
-
     break;
     default:
         printf("Retornando ao menu principal\n");
@@ -443,14 +481,6 @@ Aluno *atualizar_aluno(Aluno *aluno)
     novo_aluno.endereco = construir_endereco();
     return atualizarAluno(aluno, &novo_aluno);
 
-    //     Professor novo_professor;
-    //     printf("CPF\t> ");
-    //     fgets(novo_professor.cpf, 12, stdin);
-    //     printf("Nome\t> ");
-    //     fgets(novo_professor.nome, 49, stdin);
-    //     novo_professor.endereco = construir_endereco();
-    //     return atualizarProfessor(professor, &novo_professor);
-    // }
 }
 Aluno *buscar_aluno(Aluno **alunos, int *posicao)
 {
@@ -470,20 +500,6 @@ Aluno *buscar_aluno(Aluno **alunos, int *posicao)
         }
     }
     *posicao = pos_resultado;
-    return resultado;
-}
-
-Aluno *verificar_matricula(Aluno **alunos, char *matricula)
-{
-    Aluno *resultado = NULL;
-    for (int i = 0; i < MAX_ALUNO; i++)
-    {
-        if (alunos[i] && !strcmp(matricula, alunos[i]->matricula))
-        {
-            resultado = alunos[i];
-            break;
-        }
-    }
     return resultado;
 }
 
