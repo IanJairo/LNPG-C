@@ -23,8 +23,6 @@ void imprimir_aluno(Aluno *aluno);
 void imprimir_endereco(Endereco *endereco);
 Aluno *verificar_matricula(Aluno **alunos, char *matricula);
 void persistir_alunos_em_arquivo(Aluno **alunos, int qtd_atual_aluno, const char *nome_arquivo);
-
-
 /*
 
     Turmas

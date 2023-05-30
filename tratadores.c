@@ -22,13 +22,14 @@ int alunoEstaNaTurma(Aluno *aluno, Turma *turma)
 void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
 {
     int qtd_alunos;
-    Aluno **alunos_arquivo = recuperar_alunos_do_arquivo("alunos.txt", &qtd_alunos);
 
     int opcao = menu_crud_aluno();
     Aluno *aluno = NULL;
     switch (opcao)
     {
     case 1:
+    {
+
         if (*qtd_atual_aluno >= MAX_ALUNO)
         {
             printf("Número máximo de alunos atingido\n");
@@ -49,7 +50,7 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
                 }
                 alunos[*qtd_atual_aluno] = aluno;
                 (*qtd_atual_aluno)++;
-                persistir_alunos_em_arquivo(alunos, *qtd_atual_aluno, "alunos.txt"); // Chamar a função para persistir os dados
+                // persistir_alunos_em_arquivo(alunos, *qtd_atual_aluno, "alunos.txt"); // Chamar a função para persistir os dados
                 printf("Aluno adicionado com sucesso\n");
             }
             else
@@ -58,6 +59,8 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
             }
         }
         break;
+    }
+
     case 2:
     {
         int posicao = 0;
@@ -70,6 +73,8 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
         {
             printf("Aluno não encontrado!!\n");
         }
+
+        break;
     }
     case 3:
     {
@@ -86,9 +91,9 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
         {
             printf("Aluno não encontrado!!\n");
         }
+        break;
     }
 
-    break;
     case 4:
     {
         int posicao = 0;
@@ -121,9 +126,10 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
         {
             printf("Aluno não encontrado!\n");
         }
+        break;
     }
-    break;
     default:
+
         printf("Retornando ao menu principal\n");
         break;
     }
@@ -144,9 +150,9 @@ void persistir_alunos_em_arquivo(Aluno **alunos, int qtd_atual_aluno, const char
         fprintf(arquivo, "Matrícula: %s\n", aluno->matricula);
         fprintf(arquivo, "CPF: %s\n", aluno->cpf);
         fprintf(arquivo, "Nome: %s\n", aluno->nome);
-        fprintf(arquivo, "Endereço: %s\n", aluno->endereco->logradouro);
-        fprintf(arquivo, "Cidade: %s\n", aluno->endereco->cidade);
-        fprintf(arquivo, "Estado: %s\n", aluno->endereco->estado);
+        // fprintf(arquivo, "Endereço: %s\n", aluno->endereco->logradouro);
+        // fprintf(arquivo, "Cidade: %s\n", aluno->endereco->cidade);
+        // fprintf(arquivo, "Estado: %s\n", aluno->endereco->estado);
         fprintf(arquivo, "\n");
     }
 
@@ -486,7 +492,12 @@ Aluno *construir_aluno()
     printf("Nome\t> ");
     fgets(aluno.nome, 49, stdin);
     aluno.endereco = construir_endereco();
+    
     return criarAluno(aluno.matricula, aluno.cpf, aluno.nome, aluno.endereco);
+    
+    
+    // return criarAluno(aluno.matricula, aluno.cpf, aluno.nome);
+    // return criarAluno(aluno.matricula, aluno.cpf, aluno.nome, aluno.endereco);
 }
 
 Aluno *atualizar_aluno(Aluno *aluno)
@@ -496,19 +507,20 @@ Aluno *atualizar_aluno(Aluno *aluno)
     fgets(novo_aluno.cpf, 12, stdin);
     printf("Nome\t> ");
     fgets(novo_aluno.nome, 49, stdin);
-    novo_aluno.endereco = construir_endereco();
+    // novo_aluno.endereco = construir_endereco();
     return atualizarAluno(aluno, &novo_aluno);
 }
 Aluno *buscar_aluno(Aluno **alunos, int *posicao)
 {
     char matricula[50];
-    printf("Matricula > ");
+    printf("Matricula > \n"); // Adiciona a quebra de linha
+    fflush(stdout);           // Limpa o buffer de saída antes da leitura
     fgets(matricula, 49, stdin);
     Aluno *resultado = NULL;
     int pos_resultado = -1;
     for (int i = 0; i < MAX_ALUNO; i++)
     {
-        // Vamos testar se o aluno existe e se a matricula e a buscada
+        // Vamos testar se o aluno existe e se a matricula é a buscada
         // strcmp compara strings. Se for 0 indica que são iguais
         if (alunos[i] && !strcmp(matricula, alunos[i]->matricula))
         {
@@ -522,19 +534,19 @@ Aluno *buscar_aluno(Aluno **alunos, int *posicao)
 
 void imprimir_aluno(Aluno *aluno)
 {
-    printf("Matrícula: %s", aluno->matricula);
-    printf("Nome: %s", aluno->nome);
-    printf("CPF: %s", aluno->cpf);
+    printf("Matrícula: %s\n", aluno->matricula);
+    printf("Nome: %s\n", aluno->nome);
+    printf("CPF: %s\n", aluno->cpf);
     imprimir_endereco(aluno->endereco);
 }
 
 void imprimir_endereco(Endereco *endereco)
 {
-    printf("Logradouro: %s", endereco->logradouro);
-    printf("Número: %s", endereco->numero);
-    printf("Bairro: %s", endereco->bairro);
-    printf("Cidade: %s", endereco->cidade);
-    printf("Estado: %s", endereco->estado);
+    printf("Logradouro: %s\n", endereco->logradouro);
+    printf("Número: %s\n", endereco->numero);
+    printf("Bairro: %s\n", endereco->bairro);
+    printf("Cidade: %s\n", endereco->cidade);
+    printf("Estado: %s\n", endereco->estado);
 }
 
 /*  =================================== PROFESSOR ==   */

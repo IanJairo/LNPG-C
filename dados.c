@@ -7,6 +7,7 @@ Aluno *criarAluno(char *matricula,
                   char *cpf,
                   char *nome,
                   Endereco *end)
+
 {
     Aluno *aluno = (Aluno *)malloc(sizeof(Aluno));
     if (aluno)
@@ -33,8 +34,6 @@ Aluno *atualizarAluno(Aluno *aluno, Aluno *novo_aluno)
     }
     return aluno;
 }
-
-
 
 void destruirAluno(Aluno *aluno)
 {
@@ -82,13 +81,16 @@ Professor *criarProfessor(char *matricula, char *nome, char *cpf, Endereco *end)
 
 {
     Professor *professor = (Professor *)malloc(sizeof(Professor));
-    if(professor){
+    if (professor)
+    {
         memset(professor, 0, sizeof(Professor));
         strcpy(professor->matricula, matricula);
         strcpy(professor->cpf, cpf);
         strcpy(professor->nome, nome);
         professor->endereco = end;
-    }else{
+    }
+    else
+    {
         perror("Não há memória disponível. Encerrando\n\n");
     }
     return professor;
@@ -96,7 +98,8 @@ Professor *criarProfessor(char *matricula, char *nome, char *cpf, Endereco *end)
 
 Professor *atualizarProfessor(Professor *professor, Professor *novo_professor)
 {
-    if(professor && novo_professor){
+    if (professor && novo_professor)
+    {
         strcpy(professor->cpf, novo_professor->cpf);
         strcpy(professor->nome, novo_professor->nome);
         professor->endereco = novo_professor->endereco;
@@ -105,15 +108,15 @@ Professor *atualizarProfessor(Professor *professor, Professor *novo_professor)
 
 void destruirProfessor(Professor *professor)
 {
-    if(professor){
+    if (professor)
+    {
         Endereco *end = professor->endereco;
         destruirEndereco(end);
         free(professor);
     }
 }
 
-
-/* 
+/*
 ---- Turma ----
  */
 
@@ -129,10 +132,10 @@ Turma *atualizarTurma(Turma *turma, Turma *nova_turma)
 
 Turma *criarTurma(char *codigo_turma,
                   char *nome_disciplina,
-                  float media_turma) 
+                  float media_turma)
 {
     Turma *turma = (Turma *)malloc(sizeof(Turma));
-    if(turma)
+    if (turma)
     {
         strcpy(turma->codigo, codigo_turma);
         strcpy(turma->nome_disciplina, nome_disciplina);
@@ -140,7 +143,7 @@ Turma *criarTurma(char *codigo_turma,
         turma->media_turma = media_turma;
         turma->qtd_alunos = 0;
     }
-    else 
+    else
     {
         perror("Não há memória disponível. Encerrando\n\n");
     }
@@ -148,9 +151,9 @@ Turma *criarTurma(char *codigo_turma,
     return turma;
 }
 
-Turma *adicionarAluno(Turma *turma, Aluno *aluno) 
+Turma *adicionarAluno(Turma *turma, Aluno *aluno)
 {
-    if (turma && aluno) 
+    if (turma && aluno)
     {
         turma->lista_alunos[turma->qtd_alunos] = aluno;
         turma->qtd_alunos += 1;
@@ -160,7 +163,7 @@ Turma *adicionarAluno(Turma *turma, Aluno *aluno)
 
 // adicionar a função excluirAluno dentro da turma
 
-Turma *excluirAluno(Turma *turma, Aluno  *aluno)
+Turma *excluirAluno(Turma *turma, Aluno *aluno)
 {
     if (turma && aluno)
     {
@@ -193,4 +196,68 @@ Turma *adicionarProfessor(Turma *turma, Professor *professor)
     }
 
     return turma;
+}
+
+
+
+// Função de encerramento para salvar os alunos em um arquivo binário
+void salvarAlunosNoArquivo(Aluno *alunos[], int qtd_atual_aluno)
+{
+    FILE *arquivo = fopen("alunos.bin", "ab");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao abrir o arquivo alunos.bin\n");
+        exit(1);
+    }
+
+    for (int i = 0; i < qtd_atual_aluno; i++)
+    {
+        fwrite(alunos[i], sizeof(Aluno), 1, arquivo);
+        fwrite(alunos[i]->endereco, sizeof(Endereco), 1, arquivo);
+    }
+
+    fclose(arquivo);
+}
+
+void recuperarAlunosDoArquivo(Aluno *alunos[], int *qtd_atual_aluno)
+{
+    FILE *arquivo = fopen("alunos.bin", "rb");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao abrir o arquivo alunos.bin\n");
+        exit(1);
+    }
+
+    fseek(arquivo, 0L, SEEK_END);
+    int tamanho = ftell(arquivo) / sizeof(Aluno);
+    printf("Número de alunos = %d\n", tamanho);
+    rewind(arquivo);
+
+    for (int i = 0; i < tamanho; i++)
+    {
+        alunos[i] = malloc(sizeof(Aluno));
+
+        if (alunos[i] == NULL)
+        {
+            printf("Erro na alocação de memória para o aluno\n");
+            exit(1);
+        }
+
+        fread(alunos[i], sizeof(Aluno), 1, arquivo);
+
+        // Aloca memória para a estrutura endereco
+        alunos[i]->endereco = malloc(sizeof(Endereco));
+
+        if (alunos[i]->endereco == NULL)
+        {
+            printf("Erro na alocação de memória para o endereço do aluno\n");
+            exit(1);
+        }
+
+        fread(alunos[i]->endereco, sizeof(Endereco), 1, arquivo);
+
+    }
+
+    *qtd_atual_aluno = tamanho;
+    fclose(arquivo);
 }
