@@ -198,12 +198,16 @@ Turma *adicionarProfessor(Turma *turma, Professor *professor)
     return turma;
 }
 
+/*
 
+    PERISISTENCIA DE DADOS DOS ALUNOS
+
+*/
 
 // Função de encerramento para salvar os alunos em um arquivo binário
 void salvarAlunosNoArquivo(Aluno *alunos[], int qtd_atual_aluno)
 {
-    FILE *arquivo = fopen("alunos.bin", "ab");
+    FILE *arquivo = fopen("alunos.bin", "wb");
     if (arquivo == NULL)
     {
         printf("Erro ao abrir o arquivo alunos.bin\n");
@@ -259,5 +263,73 @@ void recuperarAlunosDoArquivo(Aluno *alunos[], int *qtd_atual_aluno)
     }
 
     *qtd_atual_aluno = tamanho;
+    fclose(arquivo);
+}
+
+/*
+
+    PERISISTENCIA DE DADOS DOS PROFESSORES
+
+*/
+
+void salvarProfessoresNoArquivo(Professor *professores[], int qtd_atual_professor)
+{
+    FILE *arquivo = fopen("professores.bin", "wb");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao abrir o arquivo professores.bin\n");
+        exit(1);
+    }
+
+    for (int i = 0; i < qtd_atual_professor; i++)
+    {
+        fwrite(professores[i], sizeof(Professor), 1, arquivo);
+        fwrite(professores[i]->endereco, sizeof(Endereco), 1, arquivo);
+    }
+
+    fclose(arquivo);
+}
+
+
+// Função de inicialização para recuperar os professores de um arquivo binário
+void recuperarProfessoresDoArquivo(Professor *Professores[], int *qtd_atual_professor)
+{
+    FILE *arquivo = fopen("professores.bin", "rb");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao abrir o arquivo professores.bin\n");
+        exit(1);
+    }
+
+    fseek(arquivo, 0L, SEEK_END);
+    int tamanho = ftell(arquivo) / sizeof(Professor);
+    printf("Número de professores = %d\n", tamanho);
+    rewind(arquivo);
+
+    for (int i = 0; i < tamanho; i++)
+    {
+        Professores[i] = malloc(sizeof(Professor));
+
+        if (Professores[i] == NULL)
+        {
+            printf("Erro na alocação de memória para o professor\n");
+            exit(1);
+        }
+
+        fread(Professores[i], sizeof(Professor), 1, arquivo);
+
+        // Aloca memória para a estrutura endereco
+        Professores[i]->endereco = malloc(sizeof(Endereco));
+
+        if (Professores[i]->endereco == NULL)
+        {
+            printf("Erro na alocação de memória para o endereço do professor\n");
+            exit(1);
+        }
+
+        fread(Professores[i]->endereco, sizeof(Endereco), 1, arquivo);
+    }
+
+    *qtd_atual_professor = tamanho;
     fclose(arquivo);
 }
