@@ -51,6 +51,15 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
                         return;
                     }
                 }
+                for (int i = 0; i < *qtd_atual_aluno; i++) // Compara os CPFs
+                {
+                    if (strcmp(alunos[i]->cpf, aluno->cpf) == 0)
+                    {
+                        printf("Já existe um aluno com o mesmo CPF\n");
+                        free(aluno); // Libera o espaço na memória que aluno ocupava
+                        return;
+                    }
+                }
                 // Adição de aluno:
                 alunos[*qtd_atual_aluno] = aluno;
                 (*qtd_atual_aluno)++;
