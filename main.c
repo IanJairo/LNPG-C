@@ -1,4 +1,5 @@
-#include "menus.h"
+// Importando códigos feitos anteriormente para rodarmos em nosso MAIN()
+#include "menus.h" 
 #include "tratadores.h"
 #include "dados.h"
 #include <stdio.h>
@@ -21,12 +22,12 @@ int main(int argc, char const *argv[])
     // Recuperar os alunos do arquivo
     recuperarAlunosDoArquivo(alunos, &qtd_atual_aluno);
 
-    do
+    do //Loop do-while
     {
         op_menu_principal = menu_principal();
-        switch (op_menu_principal)
+        switch (op_menu_principal) // Caso op_menu_principal igual a 1,2,3,4 ou 5: 
         {
-        case 1:
+        case 1: 
             tratador_menu_aluno(alunos, &qtd_atual_aluno, turmas);
             break;
         case 2:

@@ -1,9 +1,9 @@
-#include "menus.h"
-#include <stdio.h>
+#include "menus.h" // Incluindo o código menu.h
+#include <stdio.h> // Incluindo a biblioteca padrão
 
-int menu_principal()
+int menu_principal() // Função para menu principal
 {
-    int opcao = 0;
+    int opcao = 0; // Para opção=0
     printf("========================================\n");
     printf("============ Menu principal ============\n");
     printf("========================================\n\n");
@@ -17,20 +17,20 @@ int menu_principal()
     do
     {
 
-        printf("Selecione a central: ");
-        scanf("%d", &opcao);
-        getchar();
+        printf("Selecione a central: "); // Usuário escolhe o que vai querer acessar
+        scanf("%d", &opcao); // Lê o inteiro colocado na tela
+        getchar(); // Retorna um inteiro
 
-        if (opcao > 0 && opcao < 7)
+        if (opcao > 0 && opcao < 6) // Se o n° digitado está entre 1 e 5
         {
             return opcao;
         }
-        printf("Opcao inválida!! Tente novamente\n\n");
+        printf("Opcao inválida!! Tente novamente\n\n"); // Manda digitar novamente caso não esteja
 
     } while (1);
 }
 
-int menu_crud_aluno()
+int menu_crud_aluno() // Função para CRUD do aluno
 {
     int opcao = 0;
 
@@ -57,7 +57,7 @@ int menu_crud_aluno()
     } while (1);
 }
 
-int menu_crud_professor()
+int menu_crud_professor() // Função para CRUD do professor
 {
     int opcao = 0;
 
@@ -84,7 +84,7 @@ int menu_crud_professor()
     } while (1);
 }
 
-int menu_crud_turma()
+int menu_crud_turma() // Função CRUD da turma
 {
     int opcao = 0;
 
@@ -120,7 +120,7 @@ int menu_crud_turma()
     } while (1);
 }
 
-int menu_estatistica()
+int menu_estatistica() // Função para o menu de estatistica
 {
     int opcao = 0;
     printf("==========================================\n");
@@ -144,3 +144,7 @@ int menu_estatistica()
 
     } while (1);
 }
+
+/*
+Nota-se que todas as funções possuem os mesmos comandos, logo, não se faz necessário comentar uma por uma.
+*/

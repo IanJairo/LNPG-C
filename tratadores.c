@@ -1,3 +1,4 @@
+// Inclusão de códigos e bibliotecas que serão utilizados aqui
 #include "tratadores.h"
 #include "menus.h"
 #include <stdio.h>
@@ -5,57 +6,59 @@
 #include <string.h>
 #include <stdlib.h>
 
+// Cria função para saber se o aluno já se encontra na turma
 int alunoEstaNaTurma(Aluno *aluno, Turma *turma)
 {
     for (int i = 0; i < turma->qtd_alunos; i++)
     {
-        if (strcmp(aluno->matricula, turma->lista_alunos[i]->matricula) == 0)
+        if (strcmp(aluno->matricula, turma->lista_alunos[i]->matricula) == 0) // Comparação entre a matrícula em sistema, e a que foi digitada
         {
-            return 1;
+            return 1; // Aluno está na turma
         }
     }
-    return 0;
+    return 0; // Aluno não está na turma
 }
 
-// Cases do aluno
-
+/*
+        --------Cases do aluno----------
+*/
 void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
 {
     int qtd_alunos;
 
     int opcao = menu_crud_aluno();
     Aluno *aluno = NULL;
-    switch (opcao)
+    switch (opcao) // De acordo com a opção escolhida, teremos alguns casos:
     {
     case 1:
     {
 
         if (*qtd_atual_aluno >= MAX_ALUNO)
         {
-            printf("Número máximo de alunos atingido\n");
+            printf("Número máximo de alunos atingido\n"); // Mensagem impressa apenas quando o limite é atingido (definido em constantes.h)
         }
         else
         {
             aluno = construir_aluno();
-            if (aluno)
+            if (aluno) // Verifica se aluno é nulo
             {
                 for (int i = 0; i < *qtd_atual_aluno; i++)
                 {
-                    if (strcmp(alunos[i]->matricula, aluno->matricula) == 0)
+                    if (strcmp(alunos[i]->matricula, aluno->matricula) == 0) // Compara as matrículas
                     {
                         printf("Já existe um aluno com a mesma matrícula\n");
-                        free(aluno);
+                        free(aluno); // Libera o espaço na memória que aluno ocupava
                         return;
                     }
                 }
+                // Adição de aluno:
                 alunos[*qtd_atual_aluno] = aluno;
                 (*qtd_atual_aluno)++;
-                // persistir_alunos_em_arquivo(alunos, *qtd_atual_aluno, "alunos.txt"); // Chamar a função para persistir os dados
                 printf("Aluno adicionado com sucesso\n");
             }
             else
             {
-                printf("Falha ao criar aluno. Não há memória disponível.\n");
+                printf("Falha ao criar aluno. Não há memória disponível.\n"); // Caso não der certo a inclusão
             }
         }
         break;
@@ -65,31 +68,29 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
     {
         int posicao = 0;
         aluno = buscar_aluno(alunos, &posicao);
-        if (aluno)
+        if (aluno) // Confere se aluno é nulo
         {
-            imprimir_aluno(aluno);
+            imprimir_aluno(aluno); // imprimir_aluno recebe aluno como parametro
         }
         else
         {
-            printf("Aluno não encontrado!!\n");
+            printf("Aluno não encontrado!!\n"); // Caso seja nulo, exibe essa mensagem
         }
 
         break;
     }
     case 3:
     {
-        // criar a função de atualizar aluno
-
         int posicao = 0;
         aluno = buscar_aluno(alunos, &posicao);
-        if (aluno)
+        if (aluno) // Confere se aluno é nulo
         {
-            atualizar_aluno(aluno);
-            printf("Atualizado com sucesso!\n\n");
+            atualizar_aluno(aluno);                // atualizar_aluno recebe aluno como parametro
+            printf("Atualizado com sucesso!\n\n"); // Mensagem mostrada quando a atualização acontece
         }
         else
         {
-            printf("Aluno não encontrado!!\n");
+            printf("Aluno não encontrado!!\n"); // Quando seja nulo, exibe essa mensagem
         }
         break;
     }
@@ -98,33 +99,35 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
     {
         int posicao = 0;
         aluno = buscar_aluno(alunos, &posicao);
-        if (aluno)
+        if (aluno) // Confere se aluno é nulo
         {
             // Verificar se o aluno está associado a alguma turma
             int associado = 0;
-            for (int i = 0; i < MAX_TURMA; i++)
+            for (int i = 0; i < MAX_TURMA; i++) // Para todo aluno encontrado, é somado +1 aluno.
             {
                 if (turmas[i] && alunoEstaNaTurma(aluno, turmas[i]))
                 {
-                    associado = 1;
+                    associado = 1; // Se turma e aluno coexistirem, associado recebe 1.
                     break;
                 }
             }
-
-            if (associado)
+            /*
+                    -------Tratamento de exceção, não pode excluir aluno associado a uma turma--------------
+            */
+            if (associado) // Confere se associado é nulo
             {
-                printf("Não é possível excluir o aluno. Ele está associado a uma turma.\n");
+                printf("Não é possível excluir o aluno. Ele está associado a uma turma.\n"); // Caso não, temos um aluno associado a uma turma
             }
             else
             {
                 destruirAluno(aluno);
                 alunos[posicao] = NULL;
-                printf("Aluno excluído!\n");
+                printf("Aluno excluído!\n"); // Caso sim, chama a função de deleção de aluno, e o excluí
             }
         }
         else
         {
-            printf("Aluno não encontrado!\n");
+            printf("Aluno não encontrado!\n"); // Caso o aluno sequer tenha sido cadastrado, exibe essa mensagem
         }
         break;
     }
@@ -134,17 +137,19 @@ void tratador_menu_aluno(Aluno **alunos, int *qtd_atual_aluno, Turma **turmas)
         break;
     }
 }
-
+/*
+        --------------Função de Perscistir Aluno em arquivo----------------
+*/
 void persistir_alunos_em_arquivo(Aluno **alunos, int qtd_atual_aluno, const char *nome_arquivo)
 {
     FILE *arquivo = fopen(nome_arquivo, "w");
-    if (arquivo == NULL)
+    if (arquivo == NULL) // Confere se arquivo é nulo
     {
-        printf("Erro ao abrir o arquivo.\n");
+        printf("Erro ao abrir o arquivo.\n"); // Exibe essa mensagem, quando for nulo
         return;
     }
 
-    for (int i = 0; i < qtd_atual_aluno; i++)
+    for (int i = 0; i < qtd_atual_aluno; i++) // Para cada aluno cadastrado, seus dados são reescritos no .txt
     {
         Aluno *aluno = alunos[i];
         fprintf(arquivo, "Matrícula: %s\n", aluno->matricula);
@@ -156,43 +161,45 @@ void persistir_alunos_em_arquivo(Aluno **alunos, int qtd_atual_aluno, const char
         fprintf(arquivo, "\n");
     }
 
-    fclose(arquivo);
-    printf("Dados dos alunos foram salvos no arquivo.\n");
+    fclose(arquivo);                                       // Função para fechar o arquivo
+    printf("Dados dos alunos foram salvos no arquivo.\n"); // Mensagem exibida quando os dados são salvos
 }
 
-// Cases do professor
+/*
+        --------Cases do Professor----------
+*/
 void tratador_menu_professor(Professor **professores, int *qtd_atual_professor, Turma **turmas)
 {
     int opcao = menu_crud_professor();
     Professor *professor = NULL;
-    switch (opcao)
+    switch (opcao) // De acordo com a opção escolhida teremos alguns casos:
     {
     case 1:
         if (*qtd_atual_professor >= MAX_PROFESSOR)
         {
-            printf("Número máximo de professores atingido\n");
+            printf("Número máximo de professores atingido\n"); // Limite definido no constantes.h foi atingido
         }
         else
         {
             professor = construir_professor();
-            if (professor)
+            if (professor) // Confere se professor é nulo
             {
-                for (int i = 0; i < *qtd_atual_professor; i++)
-                {
+                for (int i = 0; i < *qtd_atual_professor; i++) // Para cada professor incluso atribui a qtd atual +1
+                {                                              //---Tratamento de exeções, não cadastrar 2 professores com mesmo cpf ou matrícula
                     if (strcmp(professores[i]->matricula, professor->matricula) == 0 ||
-                        strcmp(professores[i]->cpf, professor->cpf) == 0)
+                        strcmp(professores[i]->cpf, professor->cpf) == 0) // Confere matrículas, CPF no sistema e confere com o que foi digitado
                     {
-                        printf("Ja existe um professor com a mesma matricula ou CPF\n");
-                        free(professor);
+                        printf("Ja existe um professor com a mesma matricula ou CPF\n"); // Emmite essa mensagem quando a condição é obedecida
+                        free(professor);                                                 // Libera o espaço de professor na memória
                         return;
                     }
                 }
                 professores[*qtd_atual_professor] = professor;
-                (*qtd_atual_professor)++;
+                (*qtd_atual_professor)++; // Caso nulo, é incrementado mais um professor a qtd atual.
             }
             else
             {
-                printf("Falha ao criar professor. Não há memória disponível.\n");
+                printf("Falha ao criar professor. Não há memória disponível.\n"); // Caso não tenha espaço na memória, ou ocorra algum erro
             }
         }
         break;
@@ -200,13 +207,13 @@ void tratador_menu_professor(Professor **professores, int *qtd_atual_professor, 
     {
         int posicao = 0;
         professor = buscar_professor(professores, &posicao);
-        if (professor)
+        if (professor) // Confere se professor é nulo
         {
-            imprimir_professor(professor);
+            imprimir_professor(professor); // Chama a função que recebe como parâmetro professor
         }
         else
         {
-            printf("Professor não encontrado!\n");
+            printf("Professor não encontrado!\n"); // Caso seja nulo, exibe essa mensagem
         }
     }
     break;
@@ -214,14 +221,14 @@ void tratador_menu_professor(Professor **professores, int *qtd_atual_professor, 
     {
         int posicao = 0;
         professor = buscar_professor(professores, &posicao);
-        if (professor)
+        if (professor) // Confere se professor é nulo
         {
-            atualizar_professor(professor);
-            printf("Professor atualizado com sucesso!\n\n");
+            atualizar_professor(professor);                  // Chama a função para atualizar o professor, e passa o valor de professor como parametro
+            printf("Professor atualizado com sucesso!\n\n"); // Exibe essa mensagem com a execução da função
         }
         else
         {
-            printf("Professor não encontrado!\n");
+            printf("Professor não encontrado!\n"); // Caso seja nulo, exibe essa mensagem
         }
     }
     break;
@@ -231,42 +238,46 @@ void tratador_menu_professor(Professor **professores, int *qtd_atual_professor, 
         professor = buscar_professor(professores, &posicao);
         if (professor)
         {
-            // Verificar se o professor está associado a alguma turma
+            // Verifica se o professor está associado a alguma turma
             int associado = 0;
-            for (int i = 0; i < MAX_TURMA; i++)
+            for (int i = 0; i < MAX_TURMA; i++) // Para todo professor encontrado é somado +1
             {
                 if (turmas[i] && strcmp(turmas[i]->professor->matricula, professor->matricula) == 0)
                 {
-                    associado = 1;
+                    associado = 1; // Turma e aluno coexistem e estão associados
                     break;
                 }
             }
-
-            if (associado)
+            /*
+                -------Tratamento de Exeções, não é possível excluir professor associado a turma
+            */
+            if (associado) // Confere se associado é nulo
             {
                 printf("Nao e possivel excluir o professor. Ele esta associado a uma turma.\n");
-            }
+            } // Caso não, não permite a exclusão e mostra essa mensagem
             else
             {
                 destruirProfessor(professor);
                 professores[posicao] = NULL;
                 (*qtd_atual_professor)--;
-                printf("Professor excluído!\n");
+                printf("Professor excluído!\n"); // Caso sim, chama função de deleção do professor
             }
         }
         else
         {
-            printf("Professor não encontrado!\n");
+            printf("Professor não encontrado!\n"); // Caso o professor sequer tenha sido cadastrado
         }
     }
     break;
     default:
-        printf("Retornando ao menu principal\n");
+        printf("Retornando ao menu principal\n"); // Caso nenhum dos cases seja correspondido
         break;
     }
 }
 
-// Cases da turma
+/*
+    --------Cases da turma--------
+*/
 void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores, int *qtd_atual_turma)
 {
     int opcao = menu_crud_turma();
@@ -274,33 +285,33 @@ void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores
     Aluno *aluno = NULL;
     Professor *professor = NULL;
 
-    switch (opcao)
+    switch (opcao) // De acordo com a opção escolhida temos alguns casos:
     {
     case 1:
         if (*qtd_atual_turma >= MAX_TURMA)
         {
-            printf("Número máximo de turmas atingido\n");
+            printf("Número máximo de turmas atingido\n"); // Limite definido no constantes.h foi atingido
         }
         else
         {
             turma = construir_turma();
-            if (turma)
+            if (turma) // Confere se turma é nulo
             {
-                for (int i = 0; i < *qtd_atual_turma; i++)
-                {
-                    if (strcmp(turmas[i]->codigo, turma->codigo) == 0)
+                for (int i = 0; i < *qtd_atual_turma; i++)             // Para cada turma inclusa atribui a qtd atual +1
+                {                                                      // Tratamento de excessões: não permitir o cadastro de 2 turmas iguais
+                    if (strcmp(turmas[i]->codigo, turma->codigo) == 0) // Confere código da turma
                     {
-                        printf("Ja existe uma turma com o mesmo codigo\n");
-                        free(turma);
+                        printf("Ja existe uma turma com o mesmo codigo\n"); // Retorna caso já exista o código
+                        free(turma);                                        // Libera espaço de turma na memória
                         return;
                     }
                 }
                 turmas[*qtd_atual_turma] = turma;
-                (*qtd_atual_turma)++;
+                (*qtd_atual_turma)++; // Caso nulo, mais uma turma é incrementada a qtd atual
             }
             else
             {
-                printf("Falha ao criar turma. Nao ha memoria disponivel.\n");
+                printf("Falha ao criar turma. Nao ha memoria disponivel.\n"); //  Caso não tenha espaço na memória, ou ocorra algum erro
             }
         }
         break;
@@ -308,13 +319,13 @@ void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores
     {
         int posicao = 0;
         turma = buscar_turma(turmas, &posicao);
-        if (turma)
+        if (turma) // Confere se turma é nulo
         {
-            imprimir_turma(turma);
+            imprimir_turma(turma); // Chama a função que recebe como parêmetro turma
         }
         else
         {
-            printf("Turma não encontrada!!\n");
+            printf("Turma não encontrada!!\n"); // Caso seja nulo, exibe essa mensagem
         }
         break;
     }
@@ -322,14 +333,14 @@ void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores
     {
         int posicao = 0;
         turma = buscar_turma(turmas, &posicao);
-        if (turma)
+        if (turma) // Confere se turma é nulo
         {
-            atualizar_turma(turma);
+            atualizar_turma(turma); // Chama a função para atualizar a turma, e passa o valor de turma como parametro
             printf("Turma atualizada com sucesso!\n");
         }
         else
         {
-            printf("Turma não encontrada!!\n");
+            printf("Turma não encontrada!!\n"); // Caso seja nulo, exibe essa mensagem
         }
         break;
     }
@@ -337,16 +348,16 @@ void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores
     {
         int posicao = 0;
         turma = buscar_turma(turmas, &posicao);
-        if (turma)
-        {
+        if (turma) // Confere se turma é nulo
+        {          // Caso sim, chama a função para deleção da turma
             destruirTurma(turma);
             turmas[posicao] = NULL;
-            *qtd_atual_turma = *qtd_atual_turma - 1;
-            printf("Turma destruida\n");
+            *qtd_atual_turma = *qtd_atual_turma - 1; // Subtrai 1 da qtd atual
+            printf("Turma destruida\n");             // Exibe essa mensagem
         }
         else
         {
-            printf("Turma não encontrada!!\n");
+            printf("Turma não encontrada!!\n"); // Caso a turma sequer tenha sido cadastrada
         }
         break;
     }
@@ -354,24 +365,24 @@ void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores
     {
         int posicao = 0;
         turma = buscar_turma(turmas, &posicao);
-        if (turma)
+        if (turma) // Confere se turma é nulo
         {
             posicao = 0;
-            aluno = buscar_aluno(alunos, &posicao);
+            aluno = buscar_aluno(alunos, &posicao); // Chama a função buscar_aluno para encontrar um aluno na turma
 
-            if (aluno)
+            if (aluno) // Confere se aluno é nulo
             {
-                adicionarAluno(turma, aluno);
-                printf("O cadastro do aluno foi um sucesso!\n");
+                adicionarAluno(turma, aluno);                    // Chama a função para adicionar aluno, dentro da turma
+                printf("O cadastro do aluno foi um sucesso!\n"); // Exibe essa mensagem, quando tem sucesso
             }
             else
             {
-                printf("Nao foi encontrado nenhum aluno!!\n");
+                printf("Nao foi encontrado nenhum aluno!!\n"); // Caso não tenha o aluno na turma
             }
         }
         else
         {
-            printf("Não foi encontrada nenhuma turma com esse código !!\n");
+            printf("Não foi encontrada nenhuma turma com esse código !!\n"); // Caso sequer o código exista
         }
         break;
     }
@@ -381,31 +392,31 @@ void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores
         int posicao = 0;
         turma = buscar_turma(turmas, &posicao);
 
-        // Verifica se a turma existe
+        // Confere se a turma é nulo
         if (turma)
         {
             // Verifica se a turma possui alunos
             if (turma->lista_alunos)
             {
-                // Busca o aluno
+                // Caso sim, busca o aluno
                 posicao = 0;
                 aluno = buscar_aluno(turma->lista_alunos, &posicao);
 
-                // Verifica se o aluno existe
+                // Verifica se o aluno é nulo
                 if (aluno)
                 {
-                    // Remove o aluno da turma
+                    // Chama função para exclusão do aluno da turma
                     excluirAluno(turma, aluno);
                     printf("Aluno removido com sucesso!\n");
                 }
                 else
                 {
-                    printf("Aluno não encontrado!!\n");
+                    printf("Aluno não encontrado!!\n"); // Caso o aluno digitado não seja encontrado
                 }
             }
             else
             {
-                printf("Turma não possui alunos cadastrados!!\n");
+                printf("Turma não possui alunos cadastrados!!\n"); // Caso sequer a turma tenha alunos
             }
         }
         break;
@@ -414,24 +425,25 @@ void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores
     {
         int posicao = 0;
         turma = buscar_turma(turmas, &posicao);
-        if (turma)
+        if (turma) // Confere se turma é nulo
         {
+            // Verifica se a turma possuí professores
             posicao = 0;
             professor = buscar_professor(professores, &posicao);
 
-            if (professor)
+            if (professor) // Confere se o professor é nulo
             {
-                adicionarProfessor(turma, professor);
-                printf("Professor adicionado a turma com sucesso!\n");
+                adicionarProfessor(turma, professor);                  // Chama a função para adicionar professor, na turma
+                printf("Professor adicionado a turma com sucesso!\n"); // Exibe essa mensagem
             }
             else
             {
-                printf("Professor não encontrado no sistema!!\n");
+                printf("Professor não encontrado no sistema!!\n"); // Caso não haja o professor dentro da turma
             }
         }
         else
         {
-            printf("Turma não encontrada no sistema!!\n");
+            printf("Turma não encontrada no sistema!!\n"); // Caso sequer a turma esteja cadastrada
         }
         break;
     }
@@ -439,30 +451,30 @@ void tratador_menu_turma(Turma **turmas, Aluno **alunos, Professor **professores
     {
         int posicao = 0;
         turma = buscar_turma(turmas, &posicao);
-        if (turma)
+        if (turma) // Confere se turma é nulo
         {
-            if (turma->professor)
+            if (turma->professor) // Confere se professor em turma é nulo
             {
                 turma->professor = NULL;
-                printf("Professor removido com sucesso!\n");
+                printf("Professor removido com sucesso!\n"); // Remove professor passando seu valor para nulo
             }
             else
             {
-                printf("Turma não possui professor cadastrado!!\n");
+                printf("Turma não possui professor cadastrado!!\n"); // Caso não possua professor cadastrado
             }
         }
         else
         {
-            printf("Turma nao encontrada no sistema!!\n");
+            printf("Turma nao encontrada no sistema!!\n"); // Caso sequer tenha turma no sistema
         }
         break;
     }
     default:
-        printf("Retornando ao menu principal\n");
+        printf("Retornando ao menu principal\n"); // Caso nenhum dos cases seja correspondido
         break;
     }
 }
-
+/*   Armazenamento do Endereço   */
 Endereco *construir_endereco()
 {
     Endereco endereco;
@@ -481,7 +493,7 @@ Endereco *construir_endereco()
     return criarEndereco(endereco.logradouro, endereco.bairro, endereco.cidade, endereco.estado, endereco.numero);
 }
 
-/*  =================================== ALUNOS ==   */
+/*   Armazenamento do Aluno   */
 Aluno *construir_aluno()
 {
     Aluno aluno;
@@ -492,14 +504,13 @@ Aluno *construir_aluno()
     printf("Nome\t> ");
     fgets(aluno.nome, 49, stdin);
     aluno.endereco = construir_endereco();
-    
+
     return criarAluno(aluno.matricula, aluno.cpf, aluno.nome, aluno.endereco);
-    
-    
+
     // return criarAluno(aluno.matricula, aluno.cpf, aluno.nome);
     // return criarAluno(aluno.matricula, aluno.cpf, aluno.nome, aluno.endereco);
 }
-
+/*   Atualização do Aluno   */
 Aluno *atualizar_aluno(Aluno *aluno)
 {
     Aluno novo_aluno;
@@ -510,6 +521,7 @@ Aluno *atualizar_aluno(Aluno *aluno)
     // novo_aluno.endereco = construir_endereco();
     return atualizarAluno(aluno, &novo_aluno);
 }
+/*   Buscar o Aluno   */
 Aluno *buscar_aluno(Aluno **alunos, int *posicao)
 {
     char matricula[50];
@@ -522,6 +534,7 @@ Aluno *buscar_aluno(Aluno **alunos, int *posicao)
     {
         // Vamos testar se o aluno existe e se a matricula é a buscada
         // strcmp compara strings. Se for 0 indica que são iguais
+        // Testa se o aluno existe e se a matricula é igual a buscada
         if (alunos[i] && !strcmp(matricula, alunos[i]->matricula))
         {
             resultado = alunos[i];
@@ -531,7 +544,7 @@ Aluno *buscar_aluno(Aluno **alunos, int *posicao)
     *posicao = pos_resultado;
     return resultado;
 }
-
+/*   Print do Aluno   */
 void imprimir_aluno(Aluno *aluno)
 {
     printf("Matrícula: %s\n", aluno->matricula);
@@ -539,7 +552,7 @@ void imprimir_aluno(Aluno *aluno)
     printf("CPF: %s\n", aluno->cpf);
     imprimir_endereco(aluno->endereco);
 }
-
+/*   Print  do Endereço   */
 void imprimir_endereco(Endereco *endereco)
 {
     printf("Logradouro: %s\n", endereco->logradouro);
@@ -549,7 +562,7 @@ void imprimir_endereco(Endereco *endereco)
     printf("Estado: %s\n", endereco->estado);
 }
 
-/*  =================================== PROFESSOR ==   */
+/*   Armazenamento do Professor   */
 
 Professor *construir_professor()
 {
@@ -570,7 +583,7 @@ Professor *construir_professor()
     }
     return professor;
 }
-
+/*   Atualização do Professor   */
 Professor *atualizar_professor(Professor *professor)
 {
     Professor novo_professor;
@@ -581,7 +594,7 @@ Professor *atualizar_professor(Professor *professor)
     novo_professor.endereco = construir_endereco();
     return atualizarProfessor(professor, &novo_professor);
 }
-
+/*   Buscar o Professor   */
 Professor *buscar_professor(Professor **professores, int *posicao)
 {
     char matricula[50];
@@ -590,7 +603,7 @@ Professor *buscar_professor(Professor **professores, int *posicao)
     Professor *resultado = NULL;
     int pos_resultado = -1;
     for (int i = 0; i < MAX_PROFESSOR; i++)
-    {
+    { // Testa se o professor existe e se tem a matrícula buscada
         if (professores[i] && !strcmp(matricula, professores[i]->matricula))
         {
             resultado = professores[i];
@@ -600,7 +613,7 @@ Professor *buscar_professor(Professor **professores, int *posicao)
     *posicao = pos_resultado;
     return resultado;
 }
-
+/*   Print do Professor   */
 void imprimir_professor(Professor *professor)
 {
     printf("Matricula do professor: %s", professor->matricula);
@@ -609,8 +622,7 @@ void imprimir_professor(Professor *professor)
     imprimir_endereco(professor->endereco);
 }
 
-/*  =================================== TURMAS ==   */
-
+/*   Armazenamento da Turma   */
 Turma *construir_turma()
 {
     Turma *turma = (Turma *)malloc(sizeof(Turma));
@@ -630,7 +642,7 @@ Turma *construir_turma()
     }
     return turma;
 }
-
+/*   Buscar a Turma   */
 Turma *buscar_turma(Turma **turmas, int *posicao)
 {
     char codigo[50];
@@ -650,7 +662,7 @@ Turma *buscar_turma(Turma **turmas, int *posicao)
     *posicao = pos_resultado;
     return resultado;
 }
-
+/*   Atualizar a Turma   */
 Turma *atualizar_turma(Turma *turma)
 {
     Turma nova_turma;
@@ -660,7 +672,7 @@ Turma *atualizar_turma(Turma *turma)
     scanf("%f", &nova_turma.media_turma);
     return atualizarTurma(turma, &nova_turma);
 }
-
+/*   Print da Turma   */
 void imprimir_turma(Turma *turma)
 {
     printf("== Turma ==\n");
@@ -692,27 +704,26 @@ void adicionar_aluno(Turma *turma, Aluno *aluno)
     adicionarAluno(turma, aluno);
 }
 
-/*  =================================== ESTATISTICA ==   */
-
+/*   Armazenamento das Estatísticas   */
 void tratador_menu_estatistica(Turma **turmas, Professor **professores)
 {
     int opcao = menu_estatistica();
-    switch (opcao)
+    switch (opcao) // Para cada opção escolhida, temos casos:
     {
     case 1:
-        imprimir_nomes_professores(professores);
+        imprimir_nomes_professores(professores); // Imprimir nomes dos professores recebe professores
         break;
     case 2:
-        imprimir_professores_sem_turma(professores, turmas);
+        imprimir_professores_sem_turma(professores, turmas); // Imprimir nomes dos professores sem trumas recebe professores e turmas
         break;
     case 3:
-        imprimir_media_turmas(turmas);
+        imprimir_media_turmas(turmas); // Imprimir media das turmas recebe media
         break;
     case 4:
         break;
     }
 }
-
+/* Define a função IMPRIMIR_NOMES_PROFESSORES */
 void imprimir_nomes_professores(Professor **professores)
 {
     if (professores[0] == NULL)
@@ -732,7 +743,7 @@ void imprimir_nomes_professores(Professor **professores)
         printf("%s", professores[i]->nome);
     }
 }
-
+/*  Define a função IMPRIMIR_PROFESSORES_SEM_TURMA  */
 void imprimir_professores_sem_turma(Professor **professores, Turma **turmas)
 {
     if (professores[0] == NULL)
@@ -789,7 +800,7 @@ void imprimir_professores_sem_turma(Professor **professores, Turma **turmas)
         printf("%s", professores_sem_turma[i]->matricula);
     }
 }
-
+/* Define a função IMPRIMIR_MEDIA_TURMAS */
 void imprimir_media_turmas(Turma **turmas)
 {
     if (turmas[0] == NULL)
@@ -805,7 +816,6 @@ void imprimir_media_turmas(Turma **turmas)
         {
             break;
         }
-        // explicar isso
         ++qtd_turmas;
         soma += turmas[i]->media_turma;
     }
