@@ -1,9 +1,9 @@
-#include "menus.h" // Incluindo o código menu.h
-#include <stdio.h> // Incluindo a biblioteca padrão
+#include "menus.h"
+#include <stdio.h> 
 
-int menu_principal() // Função para menu principal
+int menu_principal()
 {
-    int opcao = 0; // Para opção=0
+    int opcao = 0;
     printf("========================================\n");
     printf("============ Menu principal ============\n");
     printf("========================================\n\n");
@@ -14,18 +14,18 @@ int menu_principal() // Função para menu principal
     printf("4 - Central de estatisticas\n");
     printf("5 - Sair\n");
 
-    do
+    do // Loop do-while até digitar opção válida
     {
 
-        printf("Selecione a central: "); // Usuário escolhe o que vai querer acessar
-        scanf("%d", &opcao); // Lê o inteiro colocado na tela
-        getchar(); // Retorna um inteiro
+        printf("Selecione a central: ");
+        scanf("%d", &opcao); // recebe input
+        getchar(); // limpa buffer
 
         if (opcao > 0 && opcao < 6) // Se o n° digitado está entre 1 e 5
         {
             return opcao;
         }
-        printf("Opcao inválida!! Tente novamente\n\n"); // Manda digitar novamente caso não esteja
+        printf("Opcao inválida!! Tente novamente\n\n"); 
 
     } while (1);
 }
@@ -43,12 +43,12 @@ int menu_crud_aluno() // Função para CRUD do aluno
     printf("4 - Excluir aluno\n");
     printf("5 - Voltar menu anterior\n");
 
-    do
+    do // Loop do-while até digitar opção válida
     {
         printf("Opcao: ");
-        scanf("%d", &opcao);
-        getchar();
-        if (opcao > 0 && opcao < 6)
+        scanf("%d", &opcao); // recebe input
+        getchar(); // limpa buffer
+        if (opcao > 0 && opcao < 6) // Se o n° digitado está entre 1 e 5
         {
             return opcao;
         }
@@ -70,12 +70,12 @@ int menu_crud_professor() // Função para CRUD do professor
     printf("4 - Excluir professor\n");
     printf("5 - Voltar menu anterior\n");
 
-    do
+    do // Loop do-while até digitar opção válida
     {
         printf("Opcao: ");
-        scanf("%d", &opcao);
-        getchar();
-        if (opcao > 0 && opcao < 6)
+        scanf("%d", &opcao); // recebe input
+        getchar(); // limpa buffer
+        if (opcao > 0 && opcao < 6) // Se o n° digitado está entre 1 e 5
         {
             return opcao;
         }
@@ -109,9 +109,9 @@ int menu_crud_turma() // Função CRUD da turma
     do
     {
         printf("Opcao: ");
-        scanf("%d", &opcao);
-        getchar();
-        if (opcao > 0 && opcao < 10)
+        scanf("%d", &opcao); // recebe input
+        getchar(); // limpa buffer
+        if (opcao > 0 && opcao < 10) // Se o n° digitado está entre 1 e 9
         {
             return opcao;
         }
@@ -131,12 +131,12 @@ int menu_estatistica() // Função para o menu de estatistica
     printf("3 - Calculo da media de todas as turmas\n");
     printf("4 - Voltar ao menu anterior\n");
     
-    do
+    do // Loop do-while até digitar opção válida
     {
         printf("Opcao: ");
-        scanf("%d", &opcao);
-        getchar();
-        if (opcao > 0 && opcao < 5)
+        scanf("%d", &opcao); // recebe input
+        getchar(); // limpa buffer
+        if (opcao > 0 && opcao < 5) // Se o n° digitado está entre 1 e 4
         {
             return opcao;
         }
@@ -146,5 +146,5 @@ int menu_estatistica() // Função para o menu de estatistica
 }
 
 /*
-Nota-se que todas as funções possuem os mesmos comandos, logo, não se faz necessário comentar uma por uma.
+Nota-se que todas as funções possuem os mesmos comandos, com a mesma função, porém, para menus diferentes.
 */
