@@ -22,6 +22,9 @@ int main(int argc, char const *argv[])
     // Recuperar os alunos do arquivo
     recuperarAlunosDoArquivo(alunos, &qtd_atual_aluno);
 
+    // Recuperar os professores do arquivo
+    recuperarProfessoresDoArquivo(professores, &qtd_atual_professor);
+
     do //Loop do-while
     {
         op_menu_principal = menu_principal();
@@ -43,6 +46,9 @@ int main(int argc, char const *argv[])
             printf("Finalizando app...\n\n");
             // Registrar a função de encerramento para salvar os alunos no arquivo binário
             salvarAlunosNoArquivo(alunos, qtd_atual_aluno);
+
+            // Registrar a função de encerramento para salvar os professores no arquivo binário
+            salvarProfessoresNoArquivo(professores, qtd_atual_professor);
 
             break;
         }

@@ -88,4 +88,9 @@ Persistencia de dados
 void recuperarAlunosDoArquivo(Aluno *alunos[], int *qtd_atual_aluno);
 void salvarAlunosNoArquivo(Aluno *alunos[], int qtd_atual_aluno);
 
+
+
+// PROFESSORES
+void recuperarProfessoresDoArquivo(Professor *professores[], int *qtd_atual_professor);
+void salvarProfessoresNoArquivo(Professor *professores[], int qtd_atual_professor);
 #endif // Fim do bloco condicional
