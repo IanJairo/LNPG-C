@@ -11,7 +11,7 @@
 
 int main(int argc, char const *argv[])
 {
-    int qtd_atual_aluno = 0;
+    int qtd_atual_aluno = 0; // Instancia variaveis iniciais
     int qtd_atual_professor = 0;
     int qtd_atual_turma = 0;
     int op_menu_principal = 0;
