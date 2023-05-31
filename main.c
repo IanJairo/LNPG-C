@@ -25,6 +25,9 @@ int main(int argc, char const *argv[])
     // Recuperar os professores do arquivo
     recuperarProfessoresDoArquivo(professores, &qtd_atual_professor);
 
+    // Recuperar as turmas do arquivo
+    recuperarTurmasDoArquivo(turmas, &qtd_atual_turma);
+
     do //Loop do-while
     {
         op_menu_principal = menu_principal();
@@ -49,6 +52,9 @@ int main(int argc, char const *argv[])
 
             // Registrar a função de encerramento para salvar os professores no arquivo binário
             salvarProfessoresNoArquivo(professores, qtd_atual_professor);
+
+            // Registrar a função de encerramento para salvar as turmas no arquivo binário
+            salvarTurmasNoArquivo(turmas, qtd_atual_turma);
 
             break;
         }
